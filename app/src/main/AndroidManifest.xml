@@ -6,9 +6,14 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>  <!-- 포그라운드 권한등록-->
-   <!-- <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>   절전모드 시 -->
+    <!-- Foreground Service 사용 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <!-- 절전모드 : 화이트리스트 등록 권한 요청 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <!-- 잠금화면, 꺼진화면 꺠우기 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +22,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
+        <activity
+            android:name=".PopupActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=".popup"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,10 +37,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlarmReceiver"/>
-        <service android:name=".UndeadService"/>
+        <receiver android:name=".AlarmReceiver" />
 
+        <service android:name=".UndeadService" />
     </application>
-
 
 </manifest>

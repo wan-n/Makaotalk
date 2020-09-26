@@ -1,21 +1,24 @@
 package com.example.wifitest;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -25,6 +28,10 @@ import java.util.Calendar;
 
 public class UndeadService extends Service {
     public static Intent serviceIntent = null;
+    private PowerManager pm;
+    private KeyguardManager km;
+
+    int i;
 
     @Nullable
     @Override
@@ -36,21 +43,35 @@ public class UndeadService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d("system", "최초 호출");
+        registerReceiver(rssiReceiver, new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // 서비스가 호출될 때마다 실행
+        Log.d("system", "서비스 호출됨");
         serviceIntent = intent;
-        registerReceiver(rssiReceiver, new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
+
+        //wifi 스캔 설정
+        IntentFilter rssiFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        this.registerReceiver(rssiReceiver, rssiFilter);
+        WifiManager wifiMan = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        assert wifiMan != null;
+        wifiMan.startScan();
+
         initializeNotification();
-//
-// Todo.
-//
-// Thread, Timer 등으로 처리
+
+
         return START_STICKY;
     }
 
 
-
     public void initializeNotification() {
+        Log.d("system", "알림 표시 중...");
+
         //상태바에 아이콘 표시(notification)
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
         builder.setSmallIcon(R.drawable.cat);
@@ -69,27 +90,42 @@ public class UndeadService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         builder.setContentIntent(pendingIntent);
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {  //버전이 0 이상이면
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {  //버전이 0 이상이면
             manager.createNotificationChannel(new NotificationChannel("1", "undead_service", NotificationManager.IMPORTANCE_NONE));
         }
         Notification notification = builder.build();
         startForeground(1, notification);
     }
+
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         // 서비스가 종료될 때 실행
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 3);   //3초 간격으로
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
+        unregisterReceiver(rssiReceiver);   //wifi
+
+        Log.d("system", "종료됨");
+        if(serviceIntent != null){
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.add(Calendar.SECOND, 3);   //3초 간격으로
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+        }
+
     }
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
+        // 앱 목록에서 kill 했을 경우
+
+        //unregisterReceiver(rssiReceiver);    //wifi
+
+        Log.d("system", "실행 목록에서 삭제됨");
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 3);
@@ -104,24 +140,56 @@ public class UndeadService extends Service {
     private BroadcastReceiver rssiReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("system", "broadcastreceiver, " + i);
+            i++;
+
             WifiManager wifiMan = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             wifiMan.startScan();
             int newRssi= wifiMan.getConnectionInfo().getRssi();
-            //Toast.makeText(MainActivity.this, "" + newRssi, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "" + newRssi, Toast.LENGTH_SHORT).show();
 
-            //측정한 신호세기가 -80 이하이면 토스트 메시지 실행
-            if(newRssi <= -80){
-                Toast.makeText(getApplicationContext(), "알림 생성 (" + newRssi + ")", Toast.LENGTH_SHORT).show();
+
+            //측정한 신호세기가 -80 이하이면
+            if(newRssi <= -85){
+                Log.d("rssi", ""+newRssi);
                 //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
-                //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결하는 함수 삽입이 적당할 듯
+                //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
 
-                //푸시알림
-                createNotification(newRssi);
+
+                if(isScreenOn()){
+                    Log.d("popup", "Screen ON");
+                    //푸시알림
+                    createNotification(newRssi);
+                }else{
+                    Log.d("popup", "Screen OFF");
+                    Intent popup = new Intent(getApplicationContext(), PopupActivity.class);
+                    popup.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    //푸시알림
+                    createNotification(newRssi);
+
+                    startActivity(popup);
+                }
+
+
 
             }
 
         }
     };
+
+
+    //스크린이 켜져있나?
+    private boolean isScreenOn(){
+        pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        return pm.isInteractive();
+    }
+
+    //기기가 잠겨있나?
+    private boolean checkDeviceLock(){
+        km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        return km.inKeyguardRestrictedInputMode();
+    }
 
 
     private void createNotification(int rssi){

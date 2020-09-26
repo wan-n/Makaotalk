@@ -15,6 +15,10 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -22,39 +26,54 @@ public class MainActivity extends AppCompatActivity {
 
     public Intent foregroundServiceIntent;
 
-    private Switch switch1;
+    private Button button1, button2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
-        //기능 제어할 스위치 삽입
-        switch1 = findViewById(R.id.switch1);
+/*
+        //Doze 모드 진입 시 앱을 백그라운드로 옮기기
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(startMain);
+
+ */
+
+        //와이파이 강도 측정 기능 제어할 버튼 삽입
+        button1 = findViewById(R.id.button1);
+        button2 = findViewById(R.id.button2);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
-                    case R.id.switch1:
-                        if(switch1.isChecked()) {   //스위치가 ON일 때
-                            //신호세기 측정 시작
-                            //registerReceiver(rssiReceiver, new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
-                        }else { //스위치가 OFF일 때
-                            //기능 정지
-                            //onDestroy();
+                    case R.id.button1:
+                        //foreground service 시작
+                        startForeground();
+                        break;
+                    case R.id.button2:
+                        //foreground service 종료
+                        if (null != foregroundServiceIntent) {
+                            Log.d("system", "foreground service 종료");
+                            stopService(foregroundServiceIntent);
+                            foregroundServiceIntent = null;
+                            UndeadService.serviceIntent = null;
                         }
                         break;
+
                 }
             }
         };
-        switch1.setOnClickListener(listener);
+        button1.setOnClickListener(listener);
+        button2.setOnClickListener(listener);
 
-         */
 
-        /*
-        //절전모드 시 사용
+/*
+        //절전모드 시 사용, 화이트리스트에 등록되어있는지 확인
         PowerManager pm = (PowerManager) getApplicationContext().getSystemService(POWER_SERVICE);
         boolean isWhiteListing = false;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -66,8 +85,12 @@ public class MainActivity extends AppCompatActivity {
             intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
             startActivity(intent);
         }
-*/
 
+
+ */
+    }
+
+    public void startForeground(){
         if (null == UndeadService.serviceIntent) {
             foregroundServiceIntent = new Intent(this, UndeadService.class);
             startService(foregroundServiceIntent);
@@ -76,27 +99,10 @@ public class MainActivity extends AppCompatActivity {
             foregroundServiceIntent = UndeadService.serviceIntent;
             Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_SHORT).show();
         }
-
-
-
     }
 
 
-/*
-    protected void onResume() {
-        super.onResume();
-        IntentFilter rssiFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        this.registerReceiver(rssiReceiver, rssiFilter);
 
-        WifiManager wifiMan = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        wifiMan.startScan();
-    }
 
-    protected void onDestroy(){
-        super.onDestroy();
-        //unregisterReceiver(rssiReceiver);
-    }
-
- */
 
 }
