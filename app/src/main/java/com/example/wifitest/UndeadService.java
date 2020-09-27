@@ -103,10 +103,10 @@ public class UndeadService extends Service {
     public void onDestroy() {
         super.onDestroy();
         // 서비스가 종료될 때 실행
-
+        Log.d("system", "종료됨");
         unregisterReceiver(rssiReceiver);   //wifi
 
-        Log.d("system", "종료됨");
+
         if(serviceIntent != null){
             final Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
@@ -122,10 +122,10 @@ public class UndeadService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
         // 앱 목록에서 kill 했을 경우
-
-        //unregisterReceiver(rssiReceiver);    //wifi
-
         Log.d("system", "실행 목록에서 삭제됨");
+        //unregisterReceiver(rssiReceiver);    //kill시 onDestroy()도 같이 실행되어 막아둠
+
+
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 3);
@@ -150,7 +150,7 @@ public class UndeadService extends Service {
 
 
             //측정한 신호세기가 -80 이하이면
-            if(newRssi <= -85){
+            if(newRssi <= -80){
                 Log.d("rssi", ""+newRssi);
                 //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
                 //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
@@ -159,7 +159,10 @@ public class UndeadService extends Service {
                 if(isScreenOn()){
                     Log.d("popup", "Screen ON");
                     //푸시알림
+                    Intent popup = new Intent(getApplicationContext(), PopupActivity.class);
+                    popup.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     createNotification(newRssi);
+                    startActivity(popup);
                 }else{
                     Log.d("popup", "Screen OFF");
                     Intent popup = new Intent(getApplicationContext(), PopupActivity.class);
