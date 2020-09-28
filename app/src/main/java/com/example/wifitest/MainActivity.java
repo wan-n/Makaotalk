@@ -1,5 +1,6 @@
 package com.example.wifitest;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
@@ -34,18 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-/*
-        //Doze 모드 진입 시 foreground service가 동작하고 있는 애플리케이션을 백그라운드로 옮겨
-        //프로세스의 중요도를 FOREGROUND_SERVICE로 조정한다. - 네트워크를 사용할 수 있다.
-        Intent startMain = new Intent(Intent.ACTION_MAIN);
-        startMain.addCategory(Intent.CATEGORY_HOME);
-        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplicationContext().startActivity(startMain);
-
-        //설명 참고 : https://brunch.co.kr/@huewu/3
- */
-
-        //화이트리스트에 등록되어있는지 확인 - 도즈와 어플 대기모드의 대상으로부터 제외되는 화이트 리스트
+        //화이트리스트에 등록되어있는지 확인 - 도즈와 어플 대기모드의 대상으로부터 제외되는 화이트 리스트, 배터리 최적화에 대응
         PowerManager pm = (PowerManager) getApplicationContext().getSystemService(POWER_SERVICE);
         boolean isWhiteListing = false;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -102,13 +92,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void startForeground(){
-        if (null == UndeadService.serviceIntent) {
-            foregroundServiceIntent = new Intent(this, UndeadService.class);
-            startService(foregroundServiceIntent);
-            Toast.makeText(getApplicationContext(), "start service", Toast.LENGTH_SHORT).show();
-        } else {
-            foregroundServiceIntent = UndeadService.serviceIntent;
-            Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_SHORT).show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+            if (null == UndeadService.serviceIntent) {
+                foregroundServiceIntent = new Intent(this, UndeadService.class);
+                startForegroundService(foregroundServiceIntent);
+                Toast.makeText(getApplicationContext(), "start service", Toast.LENGTH_SHORT).show();
+            } else {
+                foregroundServiceIntent = UndeadService.serviceIntent;
+                Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
