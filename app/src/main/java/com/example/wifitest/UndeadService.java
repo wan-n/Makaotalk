@@ -1,6 +1,7 @@
 package com.example.wifitest;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,6 +18,10 @@ import java.util.Calendar;
 
 public class UndeadService extends Service {
     public static Intent serviceIntent = null;
+
+    public static AlarmManager am = null;
+    public static PendingIntent sender = null;
+
 
 
 
@@ -49,15 +54,17 @@ public class UndeadService extends Service {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 10);   //10초 간격으로 콜
         Intent intent2 = new Intent(getApplicationContext(), WifiReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), 0,intent2,0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        sender = PendingIntent.getBroadcast(getApplicationContext(), 0,intent2,0);
+        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= 23) {
-            alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), sender), sender);
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         }else if (Build.VERSION.SDK_INT >= 19) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         } else {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         }
+
+
 
         return START_STICKY;   //서비스가 종료되었을 때, 서비스를 재 실행 함. onStartCommand()를 호출
     }
@@ -124,18 +131,20 @@ public class UndeadService extends Service {
         // 앱 목록에서 kill 했을 경우
         Log.d("system", "실행 목록에서 삭제됨");
 
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 3);   //3초 간격으로
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if (Build.VERSION.SDK_INT >= 23) {
-           alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-        }else if (Build.VERSION.SDK_INT >= 19) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-        } else {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+        if(serviceIntent != null) {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.add(Calendar.SECOND, 3);   //3초 간격으로
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (Build.VERSION.SDK_INT >= 23) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            } else if (Build.VERSION.SDK_INT >= 19) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            }
         }
 
 

@@ -26,6 +26,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     public Intent foregroundServiceIntent;
+    public UndeadService uservice;
 
     private Button button1, button2;
 
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
 
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
                         if (null != foregroundServiceIntent) {
                             Log.d("system", "foreground service 종료");
                             stopService(foregroundServiceIntent);
-                        }
                             foregroundServiceIntent = null;
                             UndeadService.serviceIntent = null;
-
+                            UndeadService.am.cancel(UndeadService.sender);   //알람매니저 종료
+                        }
                         break;
 
                 }
