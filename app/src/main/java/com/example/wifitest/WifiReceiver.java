@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.graphics.Color;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
@@ -18,7 +19,12 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-public class WifiReceiver extends BroadcastReceiver {
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class WifiReceiver extends BroadcastReceiver  {
 
     private PowerManager pm;
     private KeyguardManager km;
@@ -27,40 +33,67 @@ public class WifiReceiver extends BroadcastReceiver {
 
 
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
         Log.d("system", "check wifi");
+        int n = 0;
+        ArrayList checkSSID = new ArrayList();
 
-
-        //WIFI 강도 스캔
         WifiManager wifiMan = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
-        assert wifiMan != null;
-        wifiMan.startScan();
-        int newRssi = wifiMan.getConnectionInfo().getRssi();
-        Toast.makeText(context, "" + newRssi, Toast.LENGTH_SHORT).show();
-        Log.d("WIFI", "" + newRssi);
 
+        //현재 연결된 wifi SSID 가져오기
+        WifiInfo wifiInfo = wifiMan.getConnectionInfo();
+        String mySSID = wifiInfo.getSSID();
 
-        //측정한 신호세기가 -80 이하이면
-        if(newRssi <= -80) {
-            //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
-            //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
-
-
-
-            //팝업창이 떠있는가?
-            if(checkPop == true){
-                //푸시알림
-                createNotification(context,newRssi);
-            }else{
-                //알림 없음
+        try {
+            //FileInputStream 객체생성, 파일명 "data.txt"
+            FileInputStream fis=context.openFileInput("WIFI_SSID.txt");
+            BufferedReader reader= new BufferedReader(new InputStreamReader(fis));
+            String str= reader.readLine();//한 줄씩 읽어오기
+            String str2 = '"' + str + '"';
+            while(str!=null){
+                Log.d("array", str2);
+                Log.d("array", mySSID);
+                if(mySSID.equals(str2)){
+                    Log.d("array", ""+n);
+                    //현재 연결된 와이파이와 비교하기 위한 배열
+                    checkSSID.add(n, str2);
+                    n++;
+                }
+                str= reader.readLine();
+                str2='"' + str + '"';
             }
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+
+        //현재 연결된 와이파이가 저장된 목록에 있으면 WIFI 스캔
+        if (checkSSID.size() > 0) {
+            //WIFI 강도 스캔
+            wifiMan.startScan();
+            int newRssi = wifiMan.getConnectionInfo().getRssi();
+            Toast.makeText(context, "" + newRssi, Toast.LENGTH_SHORT).show();
+            Log.d("WIFI", "" + newRssi);
+
+
+            //측정한 신호세기가 -80 이하이면
+            if (newRssi <= -80) {
+                //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
+                //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
+
+                //팝업창이 떠있는가?
+                if (checkPop == true) {
+                    //푸시알림
+                    createNotification(context, newRssi);
+                } else {
+                    //알림 없음
+                }
+            }
+        }
 
 
         //foreground service 실행  -> onStartCommand()부터 시작됨.

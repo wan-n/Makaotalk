@@ -60,7 +60,7 @@ public class PopupActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        WifiReceiver.checkPop = false;
+        WifiReceiver.checkPop = false;   // ex) 홈버튼 이후 다시 실행할 경우
     }
 
     @Override
