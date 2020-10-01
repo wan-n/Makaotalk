@@ -11,7 +11,7 @@
         android:gravity="center"
         android:textColor="#ffffff"
         android:textSize="16dp"
-        android:background="@color/colorPrimary"/>
+        android:background="#46B6E6"/>
 
     <View
         android:layout_width="match_parent"

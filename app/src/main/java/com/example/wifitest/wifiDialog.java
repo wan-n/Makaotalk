@@ -12,15 +12,15 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 
 public class wifiDialog {
-    private Context wwcontext;
+    private Context wcontext;
     private TextView title;
     private Button okButton;
     private Button cancelButton;
 
 
 
-    public wifiDialog(Context mContext) {
-        this.wwcontext = mContext;
+    public wifiDialog(Context wContext) {
+        this.wcontext = wContext;
     }
 
 
@@ -28,7 +28,7 @@ public class wifiDialog {
     public void callFunction(final String ssid) {
 
         // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
-        final Dialog dlg = new Dialog(wwcontext);
+        final Dialog dlg = new Dialog(wcontext);
         // 액티비티의 타이틀바를 숨긴다.
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -60,7 +60,7 @@ public class wifiDialog {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(wwcontext, "취소 했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(wcontext, "취소 했습니다.", Toast.LENGTH_SHORT).show();
 
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();

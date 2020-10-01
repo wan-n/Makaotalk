@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="300dp"
     android:layout_height="500dp"
-    android:background="#D3EEFA">
+    android:background="#90DCFD">
 
     <androidx.recyclerview.widget.RecyclerView
         android:paddingStart="20dp"
