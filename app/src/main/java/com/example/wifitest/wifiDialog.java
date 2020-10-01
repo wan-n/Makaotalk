@@ -49,6 +49,8 @@ public class wifiDialog {
                 Log.d("wifi","wifiDialog : " + ssid);
                 EventBus.getDefault().post(new WifiData(ssid));
                 // 커스텀 다이얼로그를 종료한다.
+
+
                 dlg.dismiss();
             }
         });

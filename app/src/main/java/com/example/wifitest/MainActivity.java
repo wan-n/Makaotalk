@@ -199,13 +199,9 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             PrintWriter writer= new PrintWriter(fos);
             writer.println(ssid);
             writer.close();
-
-            ((MainActivity)mContext).onResume();
-            finish();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     public void wLoadFile(){
