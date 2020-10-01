@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
         Log.d("wifi","Main ssid : " + wifi_ssid);
         Log.d("wifi", "저장할것인가 자네");
-
+        mContext.deleteFile("WIFI_SSID.txt");
         wSaveFile(wifi_ssid);
     }
 
@@ -200,15 +200,12 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             writer.println(ssid);
             writer.close();
 
-            onResume();
+            ((MainActivity)mContext).onResume();
+            finish();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        /*
-        //소프트 키보드 없애기
-        InputMethodManager imm= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-         */
+
     }
 
     public void wLoadFile(){
