@@ -20,7 +20,8 @@
     <!-- 절전모드 : 화이트리스트 등록 권한 요청 -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
-    <!-- 잠금화면, 꺼진화면 꺠우기 -->
+
+    <!-- 잠금화면, 꺼진화면 깨우기 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -45,9 +46,10 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".WifiReceiver" />
 
         <service android:name=".UndeadService" />
+
     </application>
 
 </manifest>

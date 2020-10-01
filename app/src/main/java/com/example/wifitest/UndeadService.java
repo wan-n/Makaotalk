@@ -1,7 +1,9 @@
 package com.example.wifitest;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,10 +11,17 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.core.app.NotificationCompat;
 import java.util.Calendar;
 
@@ -22,7 +31,7 @@ public class UndeadService extends Service {
     public static AlarmManager am = null;
     public static PendingIntent sender = null;
 
-
+    private static PowerManager.WakeLock sCpuWakeLock;
 
 
     @Nullable
@@ -40,6 +49,7 @@ public class UndeadService extends Service {
         Log.d("system", "Forground Service 최초 호출");
     }
 
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // 서비스가 호출될 때마다 실행
@@ -49,22 +59,40 @@ public class UndeadService extends Service {
         startForegroundService();
 
 
+        //기기의 CPU만 잠시 깨워줌.
+        if (sCpuWakeLock == null) {
+            PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
+            assert pm != null;
+            sCpuWakeLock = pm.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK |   //화면꺼짐은 유지.
+                            PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                            PowerManager.ON_AFTER_RELEASE, "hi");
+
+            sCpuWakeLock.acquire();
+        }
+
+
+
         //wifi rssi 측정을 위한 알람매니저
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 10);   //10초 간격으로 콜
+        calendar.add(Calendar.SECOND, 3);   //10초 간격으로 콜
         Intent intent2 = new Intent(getApplicationContext(), WifiReceiver.class);
         sender = PendingIntent.getBroadcast(getApplicationContext(), 0,intent2,0);
         am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= 23) {
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            //am.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), sender), sender);
         }else if (Build.VERSION.SDK_INT >= 19) {
             am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         } else {
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         }
 
-
+        if (sCpuWakeLock != null) {
+            sCpuWakeLock.release();
+            sCpuWakeLock = null;
+        }
 
         return START_STICKY;   //서비스가 종료되었을 때, 서비스를 재 실행 함. onStartCommand()를 호출
     }
@@ -91,11 +119,13 @@ public class UndeadService extends Service {
         builder.setContentIntent(pendingIntent);
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
-            manager.createNotificationChannel(new NotificationChannel("1", "undead_service", NotificationManager.IMPORTANCE_DEFAULT));
+            manager.createNotificationChannel(new NotificationChannel("1", "undead_service", NotificationManager.IMPORTANCE_NONE));
         }
         Notification notification = builder.build();
         startForeground(1, notification);
+
     }
+
 
 
     @Override
@@ -105,26 +135,12 @@ public class UndeadService extends Service {
         Log.d("system", "종료됨");
 
         if(serviceIntent != null){
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.add(Calendar.SECOND, 3);   //3초 간격으로
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-            if (Build.VERSION.SDK_INT >= 23) {
-               alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            }else if (Build.VERSION.SDK_INT >= 19) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            }
-
+            onCreate();
         }
 
-
-
     }
+
+
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
@@ -132,23 +148,10 @@ public class UndeadService extends Service {
         Log.d("system", "실행 목록에서 삭제됨");
 
         if(serviceIntent != null) {
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.add(Calendar.SECOND, 3);   //3초 간격으로
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            if (Build.VERSION.SDK_INT >= 23) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            } else if (Build.VERSION.SDK_INT >= 19) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            }
+            onCreate();
         }
 
 
     }
-
 
 }

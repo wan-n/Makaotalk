@@ -1,8 +1,11 @@
 package com.example.wifitest;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -46,5 +49,35 @@ public class PopupActivity extends Activity {
         button_ok.setOnClickListener(listener);
         button_cancel.setOnClickListener(listener);
 
+    }
+
+
+    //백버튼 비활성화화
+   @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
+
+    //메뉴버튼
+    @Override
+    protected void onPause() {
+        super.onPause();
+        /*
+        ActivityManager activityManager = (ActivityManager) getApplicationContext()
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        activityManager.moveTaskToFront(getTaskId(), 0);
+
+         */
+    }
+
+    //
+    @Override
+    protected void onStop() {
+        super.onStop();
+        /*
+        Intent intent = new Intent(getBaseContext(), PopupActivity.class);
+        startActivityForResult(intent, 0);
+
+         */
     }
 }

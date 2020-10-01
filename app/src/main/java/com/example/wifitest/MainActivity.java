@@ -16,6 +16,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -105,9 +106,11 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
                         if (null != foregroundServiceIntent) {
                             Log.d("system", "foreground service 종료");
                             stopService(foregroundServiceIntent);
-                        }
                             foregroundServiceIntent = null;
                             UndeadService.serviceIntent = null;
+                            UndeadService.am.cancel(UndeadService.sender);
+                        }
+
 
                         break;
 
@@ -214,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         }
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -221,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         if (null != foregroundServiceIntent) {
             stopService(foregroundServiceIntent);
             foregroundServiceIntent = null;
+
         }
 
     }
