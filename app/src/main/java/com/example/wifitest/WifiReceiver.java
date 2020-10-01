@@ -23,6 +23,8 @@ public class WifiReceiver extends BroadcastReceiver {
     private PowerManager pm;
     private KeyguardManager km;
 
+    public static boolean checkPop;
+
 
 
     @Override
@@ -46,12 +48,16 @@ public class WifiReceiver extends BroadcastReceiver {
             //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
             //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
 
-            //Intent popup = new Intent(context, PopupActivity.class);
-            //popup.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            //푸시알림
-            createNotification(context,newRssi);
-            //context.startActivity(popup);
+
+            //팝업창이 떠있는가?
+            if(checkPop == true){
+                //푸시알림
+                createNotification(context,newRssi);
+            }else{
+                //알림 없음
+            }
+
 
         }
 
@@ -68,8 +74,6 @@ public class WifiReceiver extends BroadcastReceiver {
 
     }
 
-
-
     //스크린이 켜져있나?
     private boolean isScreenOn(Context context){
         pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -81,7 +85,6 @@ public class WifiReceiver extends BroadcastReceiver {
         km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
-
 
     //상단바에 알림
     private void createNotification(Context context, int rssi){

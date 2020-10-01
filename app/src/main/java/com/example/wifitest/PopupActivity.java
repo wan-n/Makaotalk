@@ -24,14 +24,19 @@ public class PopupActivity extends Activity {
 
         Log.d("popup", "팝업창 표시");
 
+        WifiReceiver.checkPop = false;  //notification 끄기
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON   //Screen을 켜진 상태로 유지
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD    //Keyguard 를 해지
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON    //Screen On
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);    //Lock 화면 위로 실행
 
+
+
+
         button_ok = findViewById(R.id.button_ok);
         button_cancel = findViewById(R.id.button_cancel);
-
+        //버튼 이벤트
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,16 +57,31 @@ public class PopupActivity extends Activity {
     }
 
 
-    //백버튼 비활성화화
+    @Override
+    protected void onResume() {
+        super.onResume();
+        WifiReceiver.checkPop = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        WifiReceiver.checkPop = true;
+    }
+
+
+    //백버튼
    @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+       WifiReceiver.checkPop = true;
     }
 
     //메뉴버튼
     @Override
     protected void onPause() {
         super.onPause();
+        WifiReceiver.checkPop = true;
         /*
         ActivityManager activityManager = (ActivityManager) getApplicationContext()
                 .getSystemService(Context.ACTIVITY_SERVICE);
@@ -70,14 +90,10 @@ public class PopupActivity extends Activity {
          */
     }
 
-    //
+    //홈버튼
     @Override
     protected void onStop() {
         super.onStop();
-        /*
-        Intent intent = new Intent(getBaseContext(), PopupActivity.class);
-        startActivityForResult(intent, 0);
-
-         */
+        WifiReceiver.checkPop = true;
     }
 }

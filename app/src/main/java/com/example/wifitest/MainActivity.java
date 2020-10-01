@@ -47,7 +47,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{
 
-    public Intent foregroundServiceIntent;
+    public static Intent foregroundServiceIntent;
 
     private Button button1, button2;
 
@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
                 switch (v.getId()){
                     case R.id.button1:
                         //foreground service 시작
+                        WifiReceiver.checkPop = true;
                         startForeground();
                         break;
                     case R.id.button2:
