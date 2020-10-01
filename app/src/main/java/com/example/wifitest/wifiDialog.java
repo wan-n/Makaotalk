@@ -17,12 +17,9 @@ public class wifiDialog {
     private Button okButton;
     private Button cancelButton;
 
-
-
     public wifiDialog(Context wContext) {
         this.wcontext = wContext;
     }
-
 
     // 호출할 다이얼로그 함수를 정의한다.
     public void callFunction(final String ssid) {
@@ -40,8 +37,6 @@ public class wifiDialog {
         cancelButton = (Button) dlg.findViewById(R.id.cancelButton);
         title.setText(ssid);
 
-
-
         // 커스텀 다이얼로그를 노출한다.
         dlg.show();
 
@@ -50,7 +45,7 @@ public class wifiDialog {
             @Override
             public void onClick(View view) {
                 // '확인' 버튼 클릭시
-                //ssid전달
+                //ssid 전달
                 Log.d("wifi","wifiDialog : " + ssid);
                 EventBus.getDefault().post(new WifiData(ssid));
                 // 커스텀 다이얼로그를 종료한다.

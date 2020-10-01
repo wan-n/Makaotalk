@@ -5,33 +5,42 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.List;
@@ -43,11 +52,14 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     private Button button1, button2;
 
     IntentFilter intentFilter = new IntentFilter();
-    WifiManager wifiManager;
 
+    WifiManager wifiManager;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     public String wifi_ssid;
+    private TextView tv_wifi;
+    private Context mContext;
+    private Button del_button;
 
     @SuppressLint("BatteryLife")
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -56,7 +68,10 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mContext = this.getApplicationContext();
         recyclerView = findViewById(R.id.rv_recyclerview);
+        tv_wifi = findViewById(R.id.tv_svWifiName);
+        del_button = findViewById(R.id.del_button);
 /*
         //Doze 모드 진입 시 foreground service가 동작하고 있는 애플리케이션을 백그라운드로 옮겨
         //프로세스의 중요도를 FOREGROUND_SERVICE로 조정한다. - 네트워크를 사용할 수 있다.
@@ -125,9 +140,16 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         getApplicationContext().registerReceiver(wifiScanReceiver, intentFilter);
+
+        //Event Bus
+        try{ EventBus.getDefault().register(this); }catch (Exception e){}
+
+        wLoadFile();
     }
 
-
+    public void clickWifiDel(View view){
+        mContext.deleteFile("WIFI_SSID.txt");
+    }
 
     public void clickWifiScan(View view){
         boolean success = wifiManager.startScan();
@@ -160,51 +182,52 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
     //wifidialog가 끝나면 eventbus를 통해 전달된 ssid 저장
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void enterPWEvent(wifiDialog.WifiData event){
+    public void wifiEvent(wifiDialog.WifiData event){
         wifi_ssid = event.ssid;
 
-        Log.d("wifi","Main\nssid : " + wifi_ssid);
+        Log.d("wifi","Main ssid : " + wifi_ssid);
+        Log.d("wifi", "저장할것인가 자네");
+
+        wSaveFile(wifi_ssid);
     }
 
-    /*
-    //wbutton을 클릭했을 때 호출
-    public void wSaveFile(){
-        //todo ssid+pwd 가져오기
-        String data = "";
+    public void wSaveFile(String ssid){
         try {
             //FileOutputStream 객체생성, 파일명 "data.txt", 새로운 텍스트 추가하기 모드
-            FileOutputStream fos = openFileOutput("data.txt", Context.MODE_APPEND);
+            FileOutputStream fos=openFileOutput("WIFI_SSID.txt", Context.MODE_APPEND);
             PrintWriter writer= new PrintWriter(fos);
-            writer.println(data);
+            writer.println(ssid);
             writer.close();
+
+            onResume();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        /*
         //소프트 키보드 없애기
         InputMethodManager imm= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+         */
     }
 
-
-    //저장된 wifi 파일 읽어오기
-    public void wReadFile() {
-        //todo 저장된 wifi 정보 이용 연결
-        StringBuffer buffer = new StringBuffer();
+    public void wLoadFile(){
+        StringBuffer buffer= new StringBuffer();
         try {
             //FileInputStream 객체생성, 파일명 "data.txt"
-            FileInputStream fis = openFileInput("data.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-            String str = reader.readLine();//한 줄씩 읽어오기
-
-            while (str != null) {
-                buffer.append(str + "\n");
-                str = reader.readLine();
+            FileInputStream fis=openFileInput("WIFI_SSID.txt");
+            BufferedReader reader= new BufferedReader(new InputStreamReader(fis));
+            String str=reader.readLine();//한 줄씩 읽어오기
+            while(str!=null){
+                buffer.append(str+"\n");
+                str=reader.readLine();
             }
-            wtext.setText(buffer.toString());
+            tv_wifi.setText(buffer.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
+
+
 
     public void startForeground(){
         if (null == UndeadService.serviceIntent) {
@@ -230,6 +253,10 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
     }
 
+    protected void onResume(){
+        super.onResume();
+    }
+
     //Permission에 관한 메소드
     @Override
     public void onDenied(int i, String[] strings) {
@@ -242,8 +269,23 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     }
 
 
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this);
+
+        /*
+        switch(requestCode){
+            case 100: //아까 버튼을 눌렀을때 써준 임의의 requestCode =100
+                //사용자가 선택한 결과가 ALLOW 인가?
+                if(grantResults[0]==PackageManager.PERMISSION_GRANTED){ //허용
+                    Toast.makeText(this, "외부 저장소 쓰기 가능", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(this,"거부! 외부 저장소 사용 불가", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }*/
     }
 }
