@@ -26,8 +26,6 @@ public class PopupActivity extends Activity {
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON    //Screen On
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);    //Lock 화면 위로 실행
 
-
-
         button_ok = findViewById(R.id.button_ok);
         button_cancel = findViewById(R.id.button_cancel);
 
@@ -47,7 +45,6 @@ public class PopupActivity extends Activity {
 
         button_ok.setOnClickListener(listener);
         button_cancel.setOnClickListener(listener);
-
 
     }
 }
