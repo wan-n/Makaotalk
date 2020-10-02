@@ -1,6 +1,8 @@
 package com.example.wifitest;
 
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,6 +17,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -30,6 +33,7 @@ public class WifiReceiver extends BroadcastReceiver  {
     private KeyguardManager km;
 
     public static boolean checkPop;
+    private static PowerManager.WakeLock sCpuWakeLock;
 
 
 
@@ -59,7 +63,7 @@ public class WifiReceiver extends BroadcastReceiver  {
                 Log.d("array", mySSID);
                 if(mySSID.equals(str2)){
                     Log.d("array", ""+n);
-                    //현재 연결된 와이파이와 비교하기 위한 배열
+
                     checkSSID.add(n, str2);
                     n++;
                 }
@@ -93,6 +97,7 @@ public class WifiReceiver extends BroadcastReceiver  {
                     //알림 없음
                 }
             }
+            checkSSID.clear();
         }
 
 
@@ -120,7 +125,20 @@ public class WifiReceiver extends BroadcastReceiver  {
     }
 
     //상단바에 알림
+    @SuppressLint("InvalidWakeLockTag")
     private void createNotification(Context context, int rssi){
+        if (!isScreenOn(context)) {
+            Log.d("display", "LOCK");
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            sCpuWakeLock = pm.newWakeLock(
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+                            PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                            PowerManager.ON_AFTER_RELEASE, "hi");
+
+            sCpuWakeLock.acquire();
+        }
+
+
         Log.d("WIFI", "알림생성");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "2");
         builder.setContentTitle("Wifi 체크");
@@ -143,5 +161,10 @@ public class WifiReceiver extends BroadcastReceiver  {
         // id값은
         // 정의해야하는 각 알림의 고유한 int값
         notificationManager.notify(2, builder.build());
+
+        if (sCpuWakeLock != null) {
+            sCpuWakeLock.release();
+            sCpuWakeLock = null;
+        }
     }
 }

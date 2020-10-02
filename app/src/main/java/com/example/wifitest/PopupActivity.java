@@ -26,14 +26,6 @@ public class PopupActivity extends Activity {
 
         WifiReceiver.checkPop = false;  //notification 끄기
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON   //Screen을 켜진 상태로 유지
-                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD    //Keyguard 를 해지
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON    //Screen On
-                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);    //Lock 화면 위로 실행
-
-
-
-
         button_ok = findViewById(R.id.button_ok);
         button_cancel = findViewById(R.id.button_cancel);
         //버튼 이벤트

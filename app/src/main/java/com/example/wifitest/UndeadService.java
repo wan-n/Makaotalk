@@ -31,7 +31,7 @@ public class UndeadService extends Service {
     public static AlarmManager am = null;
     public static PendingIntent sender = null;
 
-    private static PowerManager.WakeLock sCpuWakeLock;
+    //private static PowerManager.WakeLock sCpuWakeLock;
 
 
     @Nullable
@@ -58,7 +58,7 @@ public class UndeadService extends Service {
 
         startForegroundService();
 
-
+        /*
         //기기의 CPU만 잠시 깨워줌.
         if (sCpuWakeLock == null) {
             PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
@@ -70,8 +70,7 @@ public class UndeadService extends Service {
 
             sCpuWakeLock.acquire();
         }
-
-
+        */
 
         //wifi rssi 측정을 위한 알람매니저
         final Calendar calendar = Calendar.getInstance();
@@ -89,10 +88,12 @@ public class UndeadService extends Service {
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         }
 
+        /*
         if (sCpuWakeLock != null) {
             sCpuWakeLock.release();
             sCpuWakeLock = null;
         }
+         */
 
         return START_STICKY;   //서비스가 종료되었을 때, 서비스를 재 실행 함. onStartCommand()를 호출
     }
