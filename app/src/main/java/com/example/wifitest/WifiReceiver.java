@@ -42,8 +42,7 @@ public class WifiReceiver extends BroadcastReceiver  {
     public void onReceive(Context context, Intent intent) {
 
         Log.d("system", "check wifi");
-        int n = 0;
-        ArrayList checkSSID = new ArrayList();
+        boolean checkSSID = false;  //현재 연결되어있는 와이파이가 사용자의 저장목록에 있는지 확인하기 위한 변수
 
         WifiManager wifiMan = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
@@ -62,10 +61,9 @@ public class WifiReceiver extends BroadcastReceiver  {
                 Log.d("array", str2);
                 Log.d("array", mySSID);
                 if(mySSID.equals(str2)){
-                    Log.d("array", ""+n);
 
-                    checkSSID.add(n, str2);
-                    n++;
+                    checkSSID = true;
+                    break;
                 }
                 str= reader.readLine();
                 str2='"' + str + '"';
@@ -76,7 +74,7 @@ public class WifiReceiver extends BroadcastReceiver  {
 
 
         //현재 연결된 와이파이가 저장된 목록에 있으면 WIFI 스캔
-        if (checkSSID.size() > 0) {
+        if (checkSSID) {
             //WIFI 강도 스캔
             wifiMan.startScan();
             int newRssi = wifiMan.getConnectionInfo().getRssi();
@@ -97,7 +95,6 @@ public class WifiReceiver extends BroadcastReceiver  {
                     //알림 없음
                 }
             }
-            checkSSID.clear();
         }
 
 
