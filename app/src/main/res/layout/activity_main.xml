@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="저장된 와이파이라능"
+        android:text="저장된 와이파이"
         android:textColor="#167CA8"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
