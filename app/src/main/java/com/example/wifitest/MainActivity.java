@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         AutoPermissions.Companion.loadAllPermissions(this,101);
 
 
-        /*
+/*
         //화이트리스트에 등록되어있는지 확인 - 도즈와 어플 대기모드의 대상으로부터 제외되는 화이트 리스트
         PowerManager pm = (PowerManager) getApplicationContext().getSystemService(POWER_SERVICE);
         boolean isWhiteListing = false;
@@ -100,7 +100,9 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             startActivity(intent);
         }
 
-         */
+ */
+
+
 
         //이미 foreground service가 작동중인 상태에서 앱을 재실행한 상태라면
         if (null != UndeadService.serviceIntent){

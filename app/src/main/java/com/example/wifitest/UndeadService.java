@@ -129,6 +129,29 @@ public class UndeadService extends Service {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    public void setAlarm() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.SECOND, 1);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -136,7 +159,7 @@ public class UndeadService extends Service {
         Log.d("system", "종료됨");
 
         if(serviceIntent != null){
-            onCreate();
+            setAlarm();
         }
 
     }
@@ -149,7 +172,7 @@ public class UndeadService extends Service {
         Log.d("system", "실행 목록에서 삭제됨");
 
         if(serviceIntent != null) {
-            onCreate();
+            setAlarm();
         }
 
 

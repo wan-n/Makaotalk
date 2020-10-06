@@ -47,6 +47,7 @@
         </activity>
 
         <receiver android:name=".WifiReceiver" />
+        <receiver android:name=".AlarmReceiver"/>
 
         <service android:name=".UndeadService" />
 

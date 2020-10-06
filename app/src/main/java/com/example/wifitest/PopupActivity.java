@@ -23,8 +23,8 @@ public class PopupActivity extends Activity {
         setContentView(R.layout.activity_popup);
 
         Log.d("popup", "팝업창 표시");
-
-        WifiReceiver.checkPop = false;  //notification 끄기
+        WifiReceiver.checkPop = false;  //포그라운드서비스에서 notification 기능 건너뜀
+        WifiReceiver.tt.cancel();    //알림 반복 종료
 
         button_ok = findViewById(R.id.button_ok);
         button_cancel = findViewById(R.id.button_cancel);
@@ -35,6 +35,9 @@ public class PopupActivity extends Activity {
                 switch (v.getId()) {
                     case R.id.button_ok:
                         Toast.makeText(getApplicationContext(), "확인!", Toast.LENGTH_SHORT).show();
+                        WifiReceiver.checkPop=true;  //마스크 인증 완료 시
+                        WifiReceiver.tt.cancel();    //알림 반복 종료
+                        finish();
                         break;
                     case R.id.button_cancel:
                         Toast.makeText(getApplicationContext(), "취소!", Toast.LENGTH_SHORT).show();
@@ -46,19 +49,28 @@ public class PopupActivity extends Activity {
         button_ok.setOnClickListener(listener);
         button_cancel.setOnClickListener(listener);
 
+
+        /*
+          무사히 마스크 인증을 완료했을 경우 checkPop = true 로 설정해주기
+          마스크 인식을 완료하기 전까지는 포그라운드 와이파이 측정기능은 돌아가지만 알림은 울리지 않게 하기 위해서.
+         */
+
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        WifiReceiver.checkPop = false;   // ex) 홈버튼 이후 다시 실행할 경우
+
+        WifiReceiver.checkPop = false;  //포그라운드서비스에서 notification 기능 건너뜀
+        WifiReceiver.tt.cancel();    //알림 반복 종료
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        WifiReceiver.checkPop = true;
+
     }
 
 
@@ -66,26 +78,22 @@ public class PopupActivity extends Activity {
    @Override
     public void onBackPressed() {
         super.onBackPressed();
-       WifiReceiver.checkPop = true;
+
     }
 
-    //메뉴버튼
-    @Override
-    protected void onPause() {
-        super.onPause();
-        WifiReceiver.checkPop = true;
-        /*
-        ActivityManager activityManager = (ActivityManager) getApplicationContext()
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        activityManager.moveTaskToFront(getTaskId(), 0);
 
-         */
-    }
 
-    //홈버튼
+    //하단버튼
     @Override
     protected void onStop() {
         super.onStop();
-        WifiReceiver.checkPop = true;
+
+        //알람 재가동
+        if(!WifiReceiver.checkPop){
+            WifiReceiver.repeatNotification(getBaseContext());
+            finish();
+        }
+
     }
+
 }
