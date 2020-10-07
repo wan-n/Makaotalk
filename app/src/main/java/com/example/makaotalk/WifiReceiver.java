@@ -83,7 +83,7 @@ public class WifiReceiver extends BroadcastReceiver  {
 
 
                 //측정한 신호세기가 -80 이하이면
-                if (newRssi <= -20) {
+                if (newRssi <= -80) {
                     //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
                     //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
 
