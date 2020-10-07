@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         wLoadFile();
     }
 
+    //와이파이 파일 삭제
     public void clickWifiDel(View view){
         mContext.deleteFile("WIFI_SSID.txt");
     }
