@@ -27,7 +27,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Mako Talk"
+        android:label="마까오톡"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -41,7 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SubActivity"/>
 
         <!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
         <activity android:name="com.example.makaotalk.popup.SubActivity"
