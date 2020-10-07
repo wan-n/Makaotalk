@@ -4,25 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +29,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.List;
@@ -49,17 +40,13 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
     public static Intent foregroundServiceIntent;
 
-    private Button button1, button2;
-
     IntentFilter intentFilter = new IntentFilter();
 
     WifiManager wifiManager;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
     public String wifi_ssid;
     private TextView tv_wifi;
     private Context mContext;
-    private Button del_button;
 
     @SuppressLint("BatteryLife")
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -71,8 +58,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         mContext = this.getApplicationContext();
         recyclerView = findViewById(R.id.rv_recyclerview);
         tv_wifi = findViewById(R.id.tv_svWifiName);
-        del_button = findViewById(R.id.del_button);
-/*
+        /*
         //Doze 모드 진입 시 foreground service가 동작하고 있는 애플리케이션을 백그라운드로 옮겨
         //프로세스의 중요도를 FOREGROUND_SERVICE로 조정한다. - 네트워크를 사용할 수 있다.
         Intent startMain = new Intent(Intent.ACTION_MAIN);
@@ -111,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         }
 
         //와이파이 강도 측정 기능 제어할 버튼 삽입
-        button1 = findViewById(R.id.button1);
-        button2 = findViewById(R.id.button2);
+        Button button1 = findViewById(R.id.button1);
+        Button button2 = findViewById(R.id.button2);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -149,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         getApplicationContext().registerReceiver(wifiScanReceiver, intentFilter);
 
         //Event Bus
-        try{ EventBus.getDefault().register(this); }catch (Exception e){}
+        try{ EventBus.getDefault().register(this); }catch (Exception ignored){}
 
         wLoadFile();
     }
@@ -166,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
     // wifiManager.startScan(); 시  발동되는 메소드
     BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean success =intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
@@ -180,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     // Wifi검색 성공
     private void scanSuccess() {
         List<ScanResult> results = wifiManager.getScanResults();
-        mAdapter=new WifiAdapter(results);
+        Adapter<WifiAdapter.WifiViewHolder> mAdapter = new WifiAdapter(results);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -212,14 +199,14 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     }
 
     public void wLoadFile(){
-        StringBuffer buffer= new StringBuffer();
+        StringBuilder buffer= new StringBuilder();
         try {
             //FileInputStream 객체생성, 파일명 "data.txt"
             FileInputStream fis=openFileInput("WIFI_SSID.txt");
             BufferedReader reader= new BufferedReader(new InputStreamReader(fis));
             String str=reader.readLine();//한 줄씩 읽어오기
             while(str!=null){
-                buffer.append(str+"\n");
+                buffer.append(str).append("\n");
                 str=reader.readLine();
             }
             tv_wifi.setText(buffer.toString());

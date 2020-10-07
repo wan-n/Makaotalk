@@ -13,9 +13,6 @@ import org.greenrobot.eventbus.EventBus;
 
 public class wifiDialog {
     private Context wcontext;
-    private TextView title;
-    private Button okButton;
-    private Button cancelButton;
 
     public wifiDialog(Context wContext) {
         this.wcontext = wContext;
@@ -32,15 +29,14 @@ public class wifiDialog {
         dlg.setContentView(R.layout.wifi_dialog);
 
         // 커스텀 다이얼로그의 각 위젯들을 정의한다.
-        title = (TextView) dlg.findViewById(R.id.title);
-        okButton = (Button) dlg.findViewById(R.id.okButton);
-        cancelButton = (Button) dlg.findViewById(R.id.cancelButton);
+        TextView title = dlg.findViewById(R.id.title);
+        Button okButton = dlg.findViewById(R.id.okButton);
+        Button cancelButton = dlg.findViewById(R.id.cancelButton);
         title.setText(ssid);
 
         // 커스텀 다이얼로그를 노출한다.
         dlg.show();
 
-        final String[] pw = new String[1];
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +63,7 @@ public class wifiDialog {
     }
 
     //Event Bus
-    public class WifiData {
+    public static class WifiData {
 
         public final String ssid;
 

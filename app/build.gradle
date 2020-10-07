@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    compileSdkVersion 30
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.example.wifitest"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -21,8 +21,15 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures{
+        dataBinding = true
+        viewBinding = true
+    }
+
+    // 필수 추가
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
     }
 }
 
@@ -43,7 +50,16 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'org.greenrobot:eventbus:3.0.0' //event bus
     implementation 'com.github.pedroSG94:AutoPermissions:1.0.3' //auto permission
-    implementation 'com.android.support:recyclerview-v7:29.0.0' //recyclerview
-    implementation 'com.android.support:design:29.1.1'
-    implementation 'com.android.support:cardview-v7:29.1.1'
+    implementation 'com.android.support:recyclerview-v7:30.0.0' //recyclerview
+    implementation 'com.android.support:design:30.0.0'
+    implementation 'com.android.support:cardview-v7:30.0.0'
+
+    // 필수 추가
+    implementation 'com.wonderkiln:camerakit:0.13.1'
+    implementation 'org.tensorflow:tensorflow-lite:+'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
 }

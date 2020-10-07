@@ -2,7 +2,6 @@ package com.example.wifitest;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,7 +16,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -25,14 +23,10 @@ import androidx.core.app.NotificationCompat;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class WifiReceiver extends BroadcastReceiver  {
-
-    private static PowerManager pm;
-    private static KeyguardManager km;
 
     public static boolean checkPop;
     private static PowerManager.WakeLock sCpuWakeLock;
@@ -44,7 +38,7 @@ public class WifiReceiver extends BroadcastReceiver  {
     public void onReceive(Context context, Intent intent) {
 
         //팝업창이 떠있는가?
-        if (checkPop == true) {
+        if (checkPop) {
             Log.d("system", "check wifi");
             boolean checkSSID = false;  //현재 연결되어있는 와이파이가 사용자의 저장목록에 있는지 확인하기 위한 변수
 
@@ -56,7 +50,7 @@ public class WifiReceiver extends BroadcastReceiver  {
             String mySSID = wifiInfo.getSSID();
 
             try {
-                //FileInputStream 객체생성, 파일명 "data.txt"
+                //FileInputStream 객체생성, 파일명 "WIFI_SSID.txt"
                 FileInputStream fis=context.openFileInput("WIFI_SSID.txt");
                 BufferedReader reader= new BufferedReader(new InputStreamReader(fis));
                 String str= reader.readLine();//한 줄씩 읽어오기
@@ -87,7 +81,7 @@ public class WifiReceiver extends BroadcastReceiver  {
 
 
                 //측정한 신호세기가 -80 이하이면
-                if (newRssi <= -80) {
+                if (newRssi <= -20) {
                     //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
                     //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
 
@@ -96,9 +90,7 @@ public class WifiReceiver extends BroadcastReceiver  {
                 }
             }
 
-        }else {
-            //팝업창이 떠 있는 상태라면 강도측정 안함함
-        }
+        } //팝업창이 떠 있는 상태라면 강도측정 안함함
 
 
         //foreground service 실행  -> onStartCommand()부터 시작됨.
@@ -114,13 +106,13 @@ public class WifiReceiver extends BroadcastReceiver  {
 
     //스크린이 켜져있나?
     private static boolean isScreenOn(Context context){
-        pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         return pm.isInteractive();
     }
 
     //기기가 잠겨있나?
     private boolean checkDeviceLock(Context context){
-        km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
 

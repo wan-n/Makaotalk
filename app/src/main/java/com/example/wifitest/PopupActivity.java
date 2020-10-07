@@ -1,21 +1,16 @@
 package com.example.wifitest;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class PopupActivity extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
 
-    private Button button_ok, button_cancel;
+public class PopupActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +21,8 @@ public class PopupActivity extends Activity {
         WifiReceiver.checkPop = false;  //포그라운드서비스에서 notification 기능 건너뜀
         WifiReceiver.tt.cancel();    //알림 반복 종료
 
-        button_ok = findViewById(R.id.button_ok);
-        button_cancel = findViewById(R.id.button_cancel);
+        Button button_ok = findViewById(R.id.button_ok);
+        Button button_cancel = findViewById(R.id.button_cancel);
         //버튼 이벤트
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -35,9 +30,13 @@ public class PopupActivity extends Activity {
                 switch (v.getId()) {
                     case R.id.button_ok:
                         Toast.makeText(getApplicationContext(), "확인!", Toast.LENGTH_SHORT).show();
+                        /*
                         WifiReceiver.checkPop=true;  //마스크 인증 완료 시
                         WifiReceiver.tt.cancel();    //알림 반복 종료
                         finish();
+                        */
+                        Intent intent = new Intent(getApplicationContext(),SubActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.button_cancel:
                         Toast.makeText(getApplicationContext(), "취소!", Toast.LENGTH_SHORT).show();
@@ -54,7 +53,6 @@ public class PopupActivity extends Activity {
           무사히 마스크 인증을 완료했을 경우 checkPop = true 로 설정해주기
           마스크 인식을 완료하기 전까지는 포그라운드 와이파이 측정기능은 돌아가지만 알림은 울리지 않게 하기 위해서.
          */
-
     }
 
 

@@ -2,8 +2,6 @@ package com.example.wifitest;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,17 +9,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.core.app.NotificationCompat;
 import java.util.Calendar;
 
@@ -82,10 +74,8 @@ public class UndeadService extends Service {
         if (Build.VERSION.SDK_INT >= 23) {
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
             //am.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), sender), sender);
-        }else if (Build.VERSION.SDK_INT >= 19) {
+        }else {
             am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-        } else {
-            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         }
 
         /*
