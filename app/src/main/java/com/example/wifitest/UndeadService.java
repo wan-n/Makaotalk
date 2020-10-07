@@ -95,6 +95,9 @@ public class UndeadService extends Service {
         }
          */
 
+
+
+
         return START_STICKY;   //서비스가 종료되었을 때, 서비스를 재 실행 함. onStartCommand()를 호출
     }
 

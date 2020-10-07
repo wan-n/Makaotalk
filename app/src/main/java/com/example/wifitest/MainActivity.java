@@ -157,6 +157,16 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     //와이파이 파일 삭제
     public void clickWifiDel(View view){
         mContext.deleteFile("WIFI_SSID.txt");
+
+        //포그라운드 서비스(와이파이 강도측정) 종료
+        //이후 와이파이를 여러개 저장하도록 변경할 경우 - 코드 수정 예정
+        if (null != foregroundServiceIntent) {
+            Log.d("system", "foreground service 종료");
+            stopService(foregroundServiceIntent);
+            foregroundServiceIntent = null;
+            UndeadService.serviceIntent = null;
+            UndeadService.am.cancel(UndeadService.sender);
+        }
     }
 
     public void clickWifiScan(View view){
