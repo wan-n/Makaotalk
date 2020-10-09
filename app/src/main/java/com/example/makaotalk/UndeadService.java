@@ -9,13 +9,18 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class UndeadService extends Service {
     public static Intent serviceIntent = null;
@@ -41,6 +46,7 @@ public class UndeadService extends Service {
         Log.d("system", "Forground Service 최초 호출");
     }
 
+
     @SuppressLint("InvalidWakeLockTag")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -49,7 +55,6 @@ public class UndeadService extends Service {
         serviceIntent = intent;
 
         startForegroundService();
-
         /*
         //기기의 CPU만 잠시 깨워줌.
         if (sCpuWakeLock == null) {
@@ -62,21 +67,25 @@ public class UndeadService extends Service {
 
             sCpuWakeLock.acquire();
         }
-        */
+
+         */
+
 
         //wifi rssi 측정을 위한 알람매니저
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 3);   //10초 간격으로 콜
+        calendar.add(Calendar.SECOND, 3);   //3초 간격으로 콜
         Intent intent2 = new Intent(getApplicationContext(), WifiReceiver.class);
         sender = PendingIntent.getBroadcast(getApplicationContext(), 0,intent2,0);
         am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= 23) {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            //am.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), sender), sender);
+            //am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            am.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), sender), sender);
         }else {
             am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         }
+
+
 
         /*
         if (sCpuWakeLock != null) {
@@ -84,9 +93,6 @@ public class UndeadService extends Service {
             sCpuWakeLock = null;
         }
          */
-
-
-
 
         return START_STICKY;   //서비스가 종료되었을 때, 서비스를 재 실행 함. onStartCommand()를 호출
     }
@@ -123,17 +129,6 @@ public class UndeadService extends Service {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     public void setAlarm() {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -141,9 +136,12 @@ public class UndeadService extends Service {
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), sender), sender);
 
     }
+
+
 
     @Override
     public void onDestroy() {

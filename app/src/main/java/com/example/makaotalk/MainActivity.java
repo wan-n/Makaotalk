@@ -116,7 +116,14 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
                             stopService(foregroundServiceIntent);
                             foregroundServiceIntent = null;
                             UndeadService.serviceIntent = null;
+
                             UndeadService.am.cancel(UndeadService.sender);
+
+                            //알림이 울리고 있는 상태에서 종료버튼을 눌렀다면
+                            //알림이 꺼지지 않도록
+                            if(!WifiReceiver.checkPop){
+                                WifiReceiver.repeatNotification(getBaseContext());
+                            }
                         }
 
 

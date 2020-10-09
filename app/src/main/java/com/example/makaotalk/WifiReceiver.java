@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -36,10 +37,11 @@ public class WifiReceiver extends BroadcastReceiver  {
 
 
 
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //팝업창이 떠있는가?
+        //알림이 울리는 중이거나, 팝업창이 떠있거나
         if (checkPop) {
             Log.d("system", "check wifi");
             boolean checkSSID = false;  //현재 연결되어있는 와이파이가 사용자의 저장목록에 있는지 확인하기 위한 변수
@@ -82,8 +84,9 @@ public class WifiReceiver extends BroadcastReceiver  {
                 Log.d("WIFI", "" + newRssi);
 
 
+
                 //측정한 신호세기가 -80 이하이면
-                if (newRssi <= -20) {
+                if (newRssi <= -80) {
                     //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
                     //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
 
@@ -93,6 +96,7 @@ public class WifiReceiver extends BroadcastReceiver  {
             }
 
         } //팝업창이 떠 있는 상태라면 강도측정 안함함
+
 
 
         //foreground service 실행  -> onStartCommand()부터 시작됨.
