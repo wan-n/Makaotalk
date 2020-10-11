@@ -10,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -29,69 +28,71 @@ import java.io.InputStreamReader;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static android.content.Context.WIFI_SERVICE;
-
 public class WifiReceiver extends BroadcastReceiver  {
 
-    public static boolean checkPop;    //팝업창이 떠 있는지 체크
-    public static boolean checkSSID;  //현재 등록된 와이파이와 연결된 와이파이가 같은지 구분하기 위한 변수
+    public static boolean checkPop;
     private static PowerManager.WakeLock sCpuWakeLock;
     public static TimerTask tt;
-    private static NotificationManager notificationManager;
 
-    @SuppressLint("InvalidWakeLockTag")
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("system", "check wifi");
+        //팝업창이 떠있는가?
+        if (checkPop) {
+            Log.d("system", "check wifi");
+            boolean checkSSID = false;  //현재 연결되어있는 와이파이가 사용자의 저장목록에 있는지 확인하기 위한 변수
+
+            WifiManager wifiMan = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
 
-        WifiManager wifiMan = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
+            //현재 연결된 wifi SSID 가져오기
+            WifiInfo wifiInfo = wifiMan.getConnectionInfo();
+            String mySSID = wifiInfo.getSSID();
 
-        //현재 연결된 wifi SSID 가져오기
-        WifiInfo wifiInfo = wifiMan.getConnectionInfo();
-        String mySSID = wifiInfo.getSSID();    //현재 연결된 와이파이명
-        String str, str2 = null;      //등록된 와이파이명을 저장할 변수
+            try {
+                //FileInputStream 객체생성, 파일명 "WIFI_SSID.txt"
+                FileInputStream fis=context.openFileInput("WIFI_SSID.txt");
+                BufferedReader reader= new BufferedReader(new InputStreamReader(fis));
+                String str= reader.readLine();//한 줄씩 읽어오기
+                String str2 = '"' + str + '"';
+                while(str!=null){
+                    Log.d("array", str2);
+                    Log.d("array", mySSID);
+                    if(mySSID.equals(str2)){
 
-        try {
-            //FileInputStream 객체생성, 파일명 "WIFI_SSID.txt"
-            FileInputStream fis=context.openFileInput("WIFI_SSID.txt");
-            BufferedReader reader= new BufferedReader(new InputStreamReader(fis));
-            str= reader.readLine();//한 줄씩 읽어오기
-            str2 = '"' + str + '"';
-            while(str!=null){   //와이파이 여러개 등록 가능하게 바꿀 때를 대비
-                Log.d("array", str2);
-                Log.d("array", mySSID);
-                if(mySSID.equals(str2)){
-
-                    checkSSID = true;
-                    break;
+                        checkSSID = true;
+                        break;
+                    }
+                    str= reader.readLine();
+                    str2='"' + str + '"';
                 }
-                str= reader.readLine();
-                str2='"' + str + '"';
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        //등록된 와이파이명과 연결된 와이파이명이 같을 경우 && 팝업창이 켜져있지 않을 경우
-        if (checkSSID && !checkPop) {
-
-            //타이머(알림반복)가 작동 중이라면
-            if (tt != null) {
-                tt.cancel();   //타이머 종료
-                notificationManager.cancel(2);   //알림 종료
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
 
-            if (!str2.equals(mySSID)) {
-                //푸시알림 반복
-                repeatNotification(context);   //3초에 한번씩 알림 울리게 타이머 제작.
-                checkSSID = false;
-            }
-        }
+            //현재 연결된 와이파이가 저장된 목록에 있으면 WIFI 스캔
+            if (checkSSID) {
+                //WIFI 강도 스캔
+                wifiMan.startScan();
+                int newRssi = wifiMan.getConnectionInfo().getRssi();
+                Toast.makeText(context, "" + newRssi, Toast.LENGTH_SHORT).show();
+                Log.d("WIFI", "" + newRssi);
 
+
+                //측정한 신호세기가 -80 이하이면
+                if (newRssi <= -80) {
+                    //일정 수치 이하일때 || 연결이 끊어졌을 때, 두 경우 모두 고려하기
+                    //알림 해제까진 신호 측정 중지하도록(이미지인식 기능과 연결)
+
+                    //푸시알림
+                    repeatNotification(context);   //5초에 한번씩 알림 울리게 타이머 제작.
+                }
+            }
+
+        } //팝업창이 떠 있는 상태라면 강도측정 안함함
 
 
         //foreground service 실행  -> onStartCommand()부터 시작됨.
@@ -140,6 +141,8 @@ public class WifiReceiver extends BroadcastReceiver  {
     @SuppressLint("InvalidWakeLockTag")
     public static void createNotification(Context context){
 
+        checkPop = false;
+
         //화면이 꺼져있으면 켠다.
         if (!isScreenOn(context)) {
             Log.d("display", "LOCK");
@@ -154,27 +157,27 @@ public class WifiReceiver extends BroadcastReceiver  {
 
 
         Log.d("WIFI", "알림생성");
-        NotificationCompat.Builder noti = new NotificationCompat.Builder(context, "2");
-        noti.setContentTitle("Wifi 체크");
-        noti.setContentText("마스크 확인");
-        noti.setSmallIcon(R.drawable.cat);
-        noti.setOngoing(true);
-        noti.setColor(Color.RED);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "2");
+        builder.setContentTitle("Wifi 체크");
+        builder.setContentText("마스크 확인");
+        builder.setSmallIcon(R.drawable.cat);
+        builder.setOngoing(true);
+        builder.setColor(Color.RED);
         // 사용자가 탭을 클릭하면 자동 제거
-        noti.setAutoCancel(true);
+        builder.setAutoCancel(true);
         Intent popup = new Intent(context, SubActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, popup, 0);
-        noti.setContentIntent(pendingIntent);
+        builder.setContentIntent(pendingIntent);
 
         // 알림 표시
-        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager.createNotificationChannel(new NotificationChannel("2", "기본 채널", NotificationManager.IMPORTANCE_DEFAULT));
         }
 
         // id값은
         // 정의해야하는 각 알림의 고유한 int값
-        notificationManager.notify(2, noti.build());
+        notificationManager.notify(2, builder.build());
 
         if (sCpuWakeLock != null) {
             sCpuWakeLock.release();

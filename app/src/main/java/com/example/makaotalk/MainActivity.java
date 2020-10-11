@@ -130,8 +130,6 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
 
 
-
-
         //Wifi Scan
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -146,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     //와이파이 파일 삭제
     public void clickWifiDel(View view){
         mContext.deleteFile("WIFI_SSID.txt");
+        Log.d("wifi", "삭제란다 애송아");
+
+        //ACTIVITY REFRESH
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
+        this.finish();
 
         //포그라운드 서비스(와이파이 스캔) 종료
         //이후 와이파이를 여러개 저장하도록 변경할 경우 - 코드 수정 예정
@@ -208,6 +212,11 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             PrintWriter writer= new PrintWriter(fos);
             writer.println(ssid);
             writer.close();
+
+            //ACTIVITY REFRESH
+            Intent refresh = new Intent(this, MainActivity.class);
+            startActivity(refresh);
+            this.finish();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -256,19 +265,13 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
     }
 
-    protected void onResume(){
-        super.onResume();
-    }
-
     //Permission에 관한 메소드
     @Override
     public void onDenied(int i, String[] strings) {
-        Toast.makeText(this, "onDenied~~", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onGranted(int i, String[] strings) {
-        Toast.makeText(this, "onGranted~~", Toast.LENGTH_SHORT).show();
     }
 
 
