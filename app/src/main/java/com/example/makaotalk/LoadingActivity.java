@@ -13,7 +13,7 @@ public class LoadingActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         try {
-            Thread.sleep(1000); //대기 초 설정
+            //Thread.sleep(1000); //대기 초 설정
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } catch (Exception e) {
