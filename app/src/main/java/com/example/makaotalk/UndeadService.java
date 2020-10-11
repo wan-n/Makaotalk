@@ -62,6 +62,12 @@ public class UndeadService extends Service {
             MainActivity.switch1.setChecked(true); //앱 종료해도 스위치 상태 고정
         }
 
+        /*
+        if(StartServiceActivity.checkSwitch){
+            StartServiceActivity.switch1.setChecked(true); //앱 종료해도 스위치 상태 고정
+        }
+
+         */
 
 
         //wifi rssi 측정을 위한 알람매니저

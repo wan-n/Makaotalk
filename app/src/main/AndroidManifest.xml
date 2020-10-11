@@ -53,6 +53,7 @@
         <activity android:name=".MainActivity">
 
         </activity>
+        <activity android:name=".StartServiceActivity"/>
 
         <!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
         <activity android:name=".popup.SubActivity"
