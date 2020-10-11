@@ -15,6 +15,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +38,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{
 
     public static Switch switch1;
@@ -91,8 +93,6 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
  */
 
-
-
         //이미 foreground service가 작동중인 상태에서 앱을 재실행한 상태라면
         if (null != UndeadService.serviceIntent){
             foregroundServiceIntent = UndeadService.serviceIntent;
@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         switch1.setOnClickListener(listener);
 
 
-
         //Wifi Scan
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -141,29 +140,9 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         wLoadFile();
     }
 
-    //와이파이 파일 삭제
-    public void clickWifiDel(View view){
-        mContext.deleteFile("WIFI_SSID.txt");
-        Log.d("wifi", "삭제란다 애송아");
 
-        //ACTIVITY REFRESH
-        Intent refresh = new Intent(this, MainActivity.class);
-        startActivity(refresh);
-        this.finish();
 
-        //포그라운드 서비스(와이파이 스캔) 종료
-        //이후 와이파이를 여러개 저장하도록 변경할 경우 - 코드 수정 예정
-        if (null != foregroundServiceIntent) {
-            Log.d("system", "foreground service 종료");
-            stopService(foregroundServiceIntent);
-            foregroundServiceIntent = null;
-            UndeadService.serviceIntent = null;
-            UndeadService.am.cancel(UndeadService.sender);
-
-            //알림이 켜진 상태에서 삭제할 경우 알림을 종료할 것인지? - 생각해보기
-        }
-    }
-
+    //wifi scan 클릭 이벤트
     public void clickWifiScan(View view){
         boolean success = wifiManager.startScan();
         if (!success) Toast.makeText(MainActivity.this, "Wifi Scan에 실패하였습니다." ,Toast.LENGTH_SHORT).show();
@@ -201,12 +180,14 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
         Log.d("wifi","Main ssid : " + wifi_ssid);
         Log.d("wifi", "저장할것인가 자네");
-        mContext.deleteFile("WIFI_SSID.txt");
         wSaveFile(wifi_ssid);
     }
 
     public void wSaveFile(String ssid){
         try {
+            //저장된 파일 삭제 후 저장
+            mContext.deleteFile("WIFI_SSID.txt");
+
             //FileOutputStream 객체생성, 파일명 "data.txt", 새로운 텍스트 추가하기 모드
             FileOutputStream fos=openFileOutput("WIFI_SSID.txt", Context.MODE_APPEND);
             PrintWriter writer= new PrintWriter(fos);
@@ -217,11 +198,13 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             Intent refresh = new Intent(this, MainActivity.class);
             startActivity(refresh);
             this.finish();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    //WIFI FILE 불러오기
     public void wLoadFile(){
         StringBuilder buffer= new StringBuilder();
         try {
@@ -239,7 +222,28 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         }
     }
 
+    //와이파이 파일 삭제
+    public void clickWifiDel(View view){
+        mContext.deleteFile("WIFI_SSID.txt");
+        Log.d("wifi", "삭제란다 애송아");
 
+        //ACTIVITY REFRESH
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
+        this.finish();
+
+        //포그라운드 서비스(와이파이 스캔) 종료
+        //이후 와이파이를 여러개 저장하도록 변경할 경우 - 코드 수정 예정
+        if (null != foregroundServiceIntent) {
+            Log.d("system", "foreground service 종료");
+            stopService(foregroundServiceIntent);
+            foregroundServiceIntent = null;
+            UndeadService.serviceIntent = null;
+            UndeadService.am.cancel(UndeadService.sender);
+
+            //알림이 켜진 상태에서 삭제할 경우 알림을 종료할 것인지? - 생각해보기
+        }
+    }
 
     public void startForeground(){
         if (null == UndeadService.serviceIntent) {

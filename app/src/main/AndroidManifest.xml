@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.makaotalk">
 
     <!-- wifi scan -->
@@ -39,24 +40,30 @@
         android:theme="@style/AppTheme">
 
 
+        <activity
+            android:name=".LoadingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/LoadingTheme" >
 
-        <activity android:name="com.example.makaotalk.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity">
+
+        </activity>
 
         <!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
-        <activity android:name="com.example.makaotalk.popup.SubActivity"
+        <activity android:name=".popup.SubActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=".popup"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
 
         <receiver android:name="com.example.makaotalk.WifiReceiver" >
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
             </intent-filter>
         </receiver>
