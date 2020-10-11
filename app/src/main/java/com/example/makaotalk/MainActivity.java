@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     public String wifi_ssid;
     private TextView tv_wifi;
     private Context mContext;
+    public static boolean checkSwitch;
 
     @SuppressLint("BatteryLife")
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
                         if(switch1.isChecked()){
                             //foreground service 시작
                             WifiReceiver.checkPop = false;
+                            checkSwitch = true;
                             startForeground();
                         }else {
                             //foreground service 종료
@@ -116,8 +117,8 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
                                 stopService(foregroundServiceIntent);
                                 foregroundServiceIntent = null;
                                 UndeadService.serviceIntent = null;
-
                                 UndeadService.am.cancel(UndeadService.sender);
+                                checkSwitch = false;
                             }
                         }
 
