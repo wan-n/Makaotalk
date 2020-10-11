@@ -39,7 +39,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{
 
-    private Switch switch1;
+    public static Switch switch1;
 
     public static Intent foregroundServiceIntent;
 

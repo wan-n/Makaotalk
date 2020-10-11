@@ -57,20 +57,8 @@ public class UndeadService extends Service {
         serviceIntent = intent;
 
         startForegroundService();
-        /*
-        //기기의 CPU만 잠시 깨워줌.
-        if (sCpuWakeLock == null) {
-            PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
-            assert pm != null;
-            sCpuWakeLock = pm.newWakeLock(
-                    PowerManager.PARTIAL_WAKE_LOCK |   //화면꺼짐은 유지.
-                            PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                            PowerManager.ON_AFTER_RELEASE, "hi");
 
-            sCpuWakeLock.acquire();
-        }
-
-         */
+        MainActivity.switch1.setChecked(true); //앱 종료해도 스위치 상태 고정
 
 
         //wifi rssi 측정을 위한 알람매니저
@@ -87,16 +75,6 @@ public class UndeadService extends Service {
             am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         }
 
-
-
-
-
-        /*
-        if (sCpuWakeLock != null) {
-            sCpuWakeLock.release();
-            sCpuWakeLock = null;
-        }
-         */
 
         return START_STICKY;   //서비스가 종료되었을 때, 서비스를 재 실행 함. onStartCommand()를 호출
     }
