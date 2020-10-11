@@ -7,12 +7,14 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -87,6 +89,8 @@ public class UndeadService extends Service {
 
 
 
+
+
         /*
         if (sCpuWakeLock != null) {
             sCpuWakeLock.release();
@@ -97,9 +101,8 @@ public class UndeadService extends Service {
         return START_STICKY;   //서비스가 종료되었을 때, 서비스를 재 실행 함. onStartCommand()를 호출
     }
 
-
     public void startForegroundService() {
-        Log.d("system", "알림 표시 중...");
+        Log.d("system", "아이콘 표시 중...");
 
         //상태바에 아이콘 표시(notification)
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");

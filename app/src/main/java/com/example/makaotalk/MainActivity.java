@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,8 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{
+
+    private Switch switch1;
 
     public static Intent foregroundServiceIntent;
 
@@ -96,44 +99,37 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_SHORT).show();
         }
 
-        //와이파이 강도 측정 기능 제어할 버튼 삽입
-        Button button1 = findViewById(R.id.button1);
-        Button button2 = findViewById(R.id.button2);
+        //와이파이 강도 측정 기능 제어할 스위치 삽입
+        switch1 = findViewById(R.id.switch1);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
-                    case R.id.button1:
-                        //foreground service 시작
-                        WifiReceiver.checkPop = true;
-                        startForeground();
-                        break;
-                    case R.id.button2:
-                        //foreground service 종료
-                        if (null != foregroundServiceIntent) {
-                            Log.d("system", "foreground service 종료");
-                            stopService(foregroundServiceIntent);
-                            foregroundServiceIntent = null;
-                            UndeadService.serviceIntent = null;
+                    case R.id.switch1:
+                        if(switch1.isChecked()){
+                            //foreground service 시작
+                            WifiReceiver.checkPop = false;
+                            startForeground();
+                        }else {
+                            //foreground service 종료
+                            if (null != foregroundServiceIntent) {
+                                Log.d("system", "foreground service 종료");
+                                stopService(foregroundServiceIntent);
+                                foregroundServiceIntent = null;
+                                UndeadService.serviceIntent = null;
 
-                            UndeadService.am.cancel(UndeadService.sender);
-
-                            //알림이 울리고 있는 상태에서 종료버튼을 눌렀다면
-                            //알림이 꺼지지 않도록
-                            if(!WifiReceiver.checkPop){
-                                WifiReceiver.repeatNotification(getBaseContext());
+                                UndeadService.am.cancel(UndeadService.sender);
                             }
                         }
-
-
-                        break;
 
                 }
             }
         };
-        button1.setOnClickListener(listener);
-        button2.setOnClickListener(listener);
+        switch1.setOnClickListener(listener);
+
+
+
 
 
         //Wifi Scan
@@ -151,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     public void clickWifiDel(View view){
         mContext.deleteFile("WIFI_SSID.txt");
 
-        //포그라운드 서비스(와이파이 강도측정) 종료
+        //포그라운드 서비스(와이파이 스캔) 종료
         //이후 와이파이를 여러개 저장하도록 변경할 경우 - 코드 수정 예정
         if (null != foregroundServiceIntent) {
             Log.d("system", "foreground service 종료");
@@ -159,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             foregroundServiceIntent = null;
             UndeadService.serviceIntent = null;
             UndeadService.am.cancel(UndeadService.sender);
+
+            //알림이 켜진 상태에서 삭제할 경우 알림을 종료할 것인지? - 생각해보기
         }
     }
 

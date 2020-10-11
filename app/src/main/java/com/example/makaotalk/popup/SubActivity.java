@@ -42,7 +42,7 @@ public class SubActivity extends Activity {
         setContentView(R.layout.activity_sub);
 
         Log.d("popup", "팝업창 표시");
-        WifiReceiver.checkPop = false;  //포그라운드서비스에서 notification 기능 건너뜀
+        WifiReceiver.checkPop = true;
         WifiReceiver.tt.cancel();    //알림 반복 종료
 
 
@@ -90,7 +90,7 @@ public class SubActivity extends Activity {
                     if(title.contains("mask")||title.contains("diaper")) {
                         Toast.makeText(getApplicationContext(), "마스크 인식 완료~!", Toast.LENGTH_LONG).show();
 
-                        WifiReceiver.checkPop=true;  //마스크 인증 완료 시
+                        WifiReceiver.checkPop=false;  //마스크 인증 완료 시
                         WifiReceiver.tt.cancel();    //알림 반복 종료
 
                         finish();
@@ -120,7 +120,7 @@ public class SubActivity extends Activity {
         super.onResume();
         cameraView.start();
 
-        WifiReceiver.checkPop = false;  //포그라운드서비스에서 notification 기능 건너뜀
+        WifiReceiver.checkPop = true;  //포그라운드서비스에서 notification 기능 건너뜀
         WifiReceiver.tt.cancel();    //알림 반복 종료
     }
 
@@ -136,7 +136,7 @@ public class SubActivity extends Activity {
         super.onStop();
 
         //알람 재가동
-        if(!WifiReceiver.checkPop){
+        if(WifiReceiver.checkPop){
             WifiReceiver.repeatNotification(getBaseContext());
             finish();
         }
