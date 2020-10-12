@@ -13,6 +13,6 @@
         android:endColor="#88b0d1"
         android:type="linear"/>
     <stroke
-        android:width="8dp"
+        android:width="15dp"
         android:color="#ffffff" />
 </shape>
