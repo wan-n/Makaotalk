@@ -101,14 +101,6 @@ public class StartServiceActivity extends AppCompatActivity {
         switch1.setOnClickListener(listener);
 
 
-        if(checkSwitch){
-
-
-        }else {
-            tv_status.setText("OFF");
-
-
-        }
 
     }
 
