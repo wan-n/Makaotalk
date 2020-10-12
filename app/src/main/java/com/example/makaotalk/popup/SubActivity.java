@@ -138,6 +138,7 @@ public class SubActivity extends Activity {
         //알람 재가동
         if(WifiReceiver.checkPop){
             WifiReceiver.repeatNotification(getBaseContext());
+            WifiReceiver.checkPop = false;
             finish();
         }
 

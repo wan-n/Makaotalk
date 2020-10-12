@@ -54,21 +54,13 @@ public class WifiReceiver extends BroadcastReceiver  {
         String str, str2 = null;      //등록된 와이파이명을 저장할 변수
 
         try {
-            //FileInputStream 객체생성, 파일명 "WIFI_SSID.txt"
-            FileInputStream fis=context.openFileInput("WIFI_SSID.txt");
-            BufferedReader reader= new BufferedReader(new InputStreamReader(fis));
-            str= reader.readLine();//한 줄씩 읽어오기
+            str= PreferenceManager.getString(context,"Wifi_ssid");
             str2 = '"' + str + '"';
-            while(str!=null){   //와이파이 여러개 등록 가능하게 바꿀 때를 대비
-                Log.d("array", str2);
-                Log.d("array", mySSID);
-                if(mySSID.equals(str2)){
 
-                    checkSSID = true;
-                    break;
-                }
-                str= reader.readLine();
-                str2='"' + str + '"';
+            Log.d("array", str2);
+            Log.d("array", mySSID);
+            if(mySSID.equals(str2)){
+                checkSSID = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
