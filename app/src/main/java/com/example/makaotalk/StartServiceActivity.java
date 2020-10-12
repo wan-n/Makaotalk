@@ -21,7 +21,7 @@ import java.io.InputStreamReader;
 public class StartServiceActivity extends AppCompatActivity {
 
     public static Switch switch1;
-    private TextView tv_status;
+    public static TextView tv_status;
 
     public static Intent foregroundServiceIntent;
 

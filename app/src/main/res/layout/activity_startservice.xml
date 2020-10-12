@@ -12,13 +12,10 @@
         android:background="@drawable/background_color"
         android:gravity="center_horizontal">
 
-
         <LinearLayout
-            android:id="@+id/layout_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="180dp"
+            android:layout_centerInParent="true"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -26,51 +23,66 @@
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:hint="ON_OFF"
+                android:text="OFF"
                 android:textAlignment="center"
-                android:textColor="#282D45"
-                android:textSize="30sp"
+                android:textColor="#8097BC"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
-            <Switch
-                android:id="@+id/switch1"
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:switchMinWidth="100dp"
-                android:thumb="@drawable/switch_thumb_selector"
-                android:track="@drawable/switch_track_selector" />
-        </LinearLayout>
+                android:padding="7dp"
+                android:background="@drawable/custom_line2">
+                <FrameLayout
+                    android:id="@+id/frame_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/custom_line">
 
-        <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_switch"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp"
-            android:gravity="center_horizontal"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
 
-            android:orientation="vertical">
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/wifiTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:text="등록된 와이파이"
-                android:textAlignment="center"
-                android:textColor="#282D45"
-                android:textSize="17sp" />
+                            <Switch
+                                android:id="@+id/switch1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:thumb="@drawable/switch_thumb_selector"
+                                android:track="@drawable/switch_track_selector" />
+                        </FrameLayout>
 
-            <TextView
-                android:id="@+id/tv_svWifiName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:hint="WIFI NAME"
-                android:textAlignment="center"
-                android:textColor="#282D45"
-                android:textSize="27sp" />
+                        <LinearLayout
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/layout_switch"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="30dp"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/tv_svWifiName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="wifi name"
+                                android:textAlignment="center"
+                                android:textColor="#8595AF"
+                                android:textSize="23sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </FrameLayout>
         </LinearLayout>
 
         <ImageView
