@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -62,16 +65,6 @@ public class UndeadService extends Service {
         if(MainActivity.checkSwitch){
             MainActivity.switch1.setChecked(true); //앱 종료해도 스위치 상태 고정
         }
-
-
-
-        /*
-        if(StartServiceActivity.checkSwitch){
-            StartServiceActivity.switch1.setChecked(true); //앱 종료해도 스위치 상태 고정
-            StartServiceActivity.tv_status.setText("ON");
-        }
-         */
-
 
 
         //wifi rssi 측정을 위한 알람매니저

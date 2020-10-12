@@ -24,18 +24,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="OFF"
+                android:layout_marginBottom="15dp"
                 android:textAlignment="center"
-                android:textColor="#8097BC"
+                android:textColor="#4e7da6"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
             <FrameLayout
+                android:id="@+id/line2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="7dp"
                 android:background="@drawable/custom_line2">
                 <FrameLayout
-                    android:id="@+id/frame_switch"
+                    android:id="@+id/line1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -76,7 +78,7 @@
                                 android:layout_height="wrap_content"
                                 android:hint="wifi name"
                                 android:textAlignment="center"
-                                android:textColor="#8595AF"
+                                android:textColor="#4e7da6"
                                 android:textSize="23sp"
                                 android:textStyle="bold" />
                         </LinearLayout>

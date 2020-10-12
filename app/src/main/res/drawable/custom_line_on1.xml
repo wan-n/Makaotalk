@@ -4,15 +4,21 @@
         <shape>
 
             <stroke
-                android:color="#e3f4ff"
-                android:width="1.5dp" />
-
+                android:color="#ffccbf"
+                android:width="9dp" />
+            <!--#e6eff5  -->
+            <solid
+                android:color="#FFFFFF"/>
             <corners
                 android:radius="200dp"/>
             <size
                 android:width="350dp"
                 android:height="350dp" />
-
+            <padding
+                android:top="20dp"
+                android:bottom="20dp"
+                android:left="20dp"
+                android:right="20dp"/>
         </shape>
     </item>
 </selector>

@@ -1,15 +1,18 @@
 package com.example.makaotalk;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +26,8 @@ public class StartServiceActivity extends AppCompatActivity {
     public static Switch switch1;
     public static TextView tv_status;
 
+     public static FrameLayout line1, line2;
+
     public static Intent foregroundServiceIntent;
 
     private TextView tv_wifi;
@@ -34,8 +39,10 @@ public class StartServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_startservice);
 
         tv_wifi = findViewById(R.id.tv_svWifiName);
-
         tv_status = findViewById(R.id.tv_status);
+
+        line1 = findViewById(R.id.line1);
+        line2 = findViewById(R.id.line2);
 
         //와이파이 강도 측정 기능 제어할 스위치 삽입
         switch1 = findViewById(R.id.switch1);
@@ -61,6 +68,9 @@ public class StartServiceActivity extends AppCompatActivity {
                             startForeground();
 
                             tv_status.setText("ON");
+                            //tv_status.setTextColor(Color.parseColor("#db7c4d"));
+                            line1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line_on1));
+                            line2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line_on2));
                             onResume();
                         }else {
                             //foreground service 종료
@@ -73,6 +83,9 @@ public class StartServiceActivity extends AppCompatActivity {
                                 checkSwitch = false;
 
                                 tv_status.setText("OFF");
+                                //tv_status.setTextColor(Color.parseColor("#4e7da6"));
+                                line1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line));
+                                line2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line2));
                                 onResume();
                             }
                         }
@@ -122,6 +135,23 @@ public class StartServiceActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(checkSwitch){
+            switch1.setChecked(true); //앱 종료해도 스위치 상태 고정
+            tv_status.setText("ON");
+            //tv_status.setTextColor(Color.parseColor("#db7c4d"));
+            line1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line_on1));
+            line2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line_on2));
+        }else{
+            tv_status.setText("OFF");
+            //tv_status.setTextColor(Color.parseColor("#4e7da6"));
+            line1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line));
+            line2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line2));
+        }
+    }
 
     @Override
     public void onDestroy() {

@@ -3,13 +3,18 @@
     <item android:state_focused="false" android:state_pressed="false">
         <shape>
 
+
+            <solid
+                android:color="#93c9ed"/>
+
+            <!--
             <gradient
                 android:angle="90"
                 android:endColor="#e6eff5"
                 android:centerColor="#e6eff5"
-                android:startColor="#87b0d4"
+                android:startColor="#81a8cc"
                 android:type="linear"/>
-
+                -->
         </shape>
     </item>
 </selector>
