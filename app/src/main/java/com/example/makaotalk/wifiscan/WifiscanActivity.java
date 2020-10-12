@@ -1,4 +1,4 @@
-package com.example.makaotalk;
+package com.example.makaotalk.wifiscan;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.makaotalk.MainActivity;
+import com.example.makaotalk.R;
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 
@@ -34,7 +36,6 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
     IntentFilter intentFilter = new IntentFilter();
     WifiManager wifiManager;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     public String wifi_ssid;
     public String wifi_saved;
     private TextView tv_wifi;
@@ -54,7 +55,7 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
         recyclerView.setHasFixedSize(true);
 
         //layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
         //권한설정
@@ -133,6 +134,7 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
         wSaveFile(wifi_ssid);
     }
 
+    //wifi 저장
     public void wSaveFile(String ssid){
 
         wifi_saved = PreferenceManager.getString(mContext,"Wifi_ssid");
@@ -146,11 +148,13 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
         this.finish();
     }
 
+
     //WIFI FILE 불러오기
     public void wLoadFile(){
         wifi_saved = PreferenceManager.getString(mContext,"Wifi_ssid");
         tv_wifi.setText(wifi_saved);
     }
+
 
     //권한
     @Override
@@ -161,12 +165,12 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void onDenied(int i, String[] strings) {
+    public void onDenied(int i, @NonNull String[] strings) {
 
     }
 
     @Override
-    public void onGranted(int i, String[] strings) {
+    public void onGranted(int i, @NonNull String[] strings) {
 
     }
 }

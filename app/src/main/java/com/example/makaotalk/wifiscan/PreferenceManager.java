@@ -1,4 +1,4 @@
-package com.example.makaotalk;
+package com.example.makaotalk.wifiscan;
 
 import android.content.Context;
 import android.content.SharedPreferences;

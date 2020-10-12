@@ -1,4 +1,4 @@
-package com.example.makaotalk;
+package com.example.makaotalk.wifiscan;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.makaotalk.R;
 
 import java.util.List;
 

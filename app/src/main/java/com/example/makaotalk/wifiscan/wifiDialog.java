@@ -1,14 +1,15 @@
-package com.example.makaotalk;
+package com.example.makaotalk.wifiscan;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.makaotalk.R;
 
 import org.greenrobot.eventbus.EventBus;
 

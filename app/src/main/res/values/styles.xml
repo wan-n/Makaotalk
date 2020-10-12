@@ -8,7 +8,7 @@
     </style>
 
     <style name="LoadingTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/background_splah</item>
+        <item name="android:windowBackground">@drawable/loading_no1</item>
     </style>
 
 </resources>

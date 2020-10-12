@@ -134,8 +134,6 @@ public class WifiReceiver extends BroadcastReceiver  {
     }
 
 
-
-
     //상단바에 알림
     @SuppressLint("InvalidWakeLockTag")
     public static void createNotification(Context context){
