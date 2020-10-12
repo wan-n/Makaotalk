@@ -33,10 +33,16 @@ public class StartServiceActivity extends AppCompatActivity {
     private TextView tv_wifi;
     public static boolean checkSwitch;
 
+    private Context mContext;
+    public String wifi_saved;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startservice);
+        this.getIntent();
+
+        mContext = this.getApplicationContext();
 
         tv_wifi = findViewById(R.id.tv_svWifiName);
         tv_status = findViewById(R.id.tv_status);
@@ -107,21 +113,10 @@ public class StartServiceActivity extends AppCompatActivity {
     }
 
 
+    //WIFI FILE 불러오기
     public void wLoadFile(){
-        StringBuilder buffer= new StringBuilder();
-        try {
-            //FileInputStream 객체생성, 파일명 "data.txt"
-            FileInputStream fis=openFileInput("WIFI_SSID.txt");
-            BufferedReader reader= new BufferedReader(new InputStreamReader(fis));
-            String str=reader.readLine();//한 줄씩 읽어오기
-            while(str!=null){
-                buffer.append(str).append("\n");
-                str=reader.readLine();
-            }
-            tv_wifi.setText(buffer.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        wifi_saved = PreferenceManager.getString(mContext,"Wifi_ssid");
+        tv_wifi.setText(wifi_saved);
     }
 
     public void startForeground(){

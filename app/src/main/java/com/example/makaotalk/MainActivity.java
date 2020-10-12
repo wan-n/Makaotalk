@@ -36,13 +36,42 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{
+
+    String btext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        //권한설정
+        AutoPermissions.Companion.loadAllPermissions(this, 101);
 
+        Context mContext = this;
+
+        //어플을 한번이라도 실행시켰으면 user 로 등록함
+        btext = PreferenceManager.getString(mContext, "begin");
+
+        if (btext.equals("user")) {
+            //user 값일 때
+            Log.d("Main", "유우우우저!");
+            Intent intent1 = new Intent(MainActivity.this, StartServiceActivity.class);
+            startActivity(intent1);
+        } else {
+            //begin 이라는 key 로 저장된 데이터가 default 값일때 데이터 저장한다.
+            Log.d("Main", "초보자임돠");
+            PreferenceManager.setString(mContext, "begin", "user");
+            Intent intent2 = new Intent(MainActivity.this, WifiscanActivity.class);
+            startActivity(intent2);
+        }
+
+    }
+
+    @Override
+    public void onDenied(int i, String[] strings) {
+    }
+
+    @Override
+    public void onGranted(int i, String[] strings) {
     }
 }

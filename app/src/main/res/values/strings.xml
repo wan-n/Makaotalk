@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">WifiTest</string>
+    <string name="delete">삭제</string>
+    <string name="wifi_scan">wifi scan</string>
+    <string name="saved_wifi">저장된 와이파이</string>
+    <string name="wifi_name">WIFI NAME</string>
 </resources>

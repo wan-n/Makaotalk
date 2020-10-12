@@ -14,7 +14,8 @@ public class LoadingActivity extends Activity {
 
         try {
             Thread.sleep(1000); //대기 초 설정
-            startActivity(new Intent(this, StartServiceActivity.class));
+            //startActivity(new Intent(this, WifiscanActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             finish();
         } catch (Exception e) {
             e.printStackTrace();

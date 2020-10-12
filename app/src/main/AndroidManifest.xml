@@ -2,33 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.makaotalk">
-
     <!-- wifi scan -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION " />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
-    <uses-feature android:name="android.hardware.wifi"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+
+    <uses-feature android:name="android.hardware.wifi" />
+
     <uses-permission android:name="android.permission.ACCEPT_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-
-    <!-- 잦은 스캔으로 인한 스캔 제한 거부 -->
-    <uses-permission android:name="android.Manifest.permission.NETWORK_SETTINGS" />
-
-    <!-- 백그라운드에서 위치권한 사용 -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
-
-    <!-- Foreground Service 사용 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <!-- 절전모드 : 화이트리스트 등록 권한 요청 -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-
-    <!-- 잠금화면, 꺼진화면 깨우기 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 잦은 스캔으로 인한 스캔 제한 거부 -->
+    <uses-permission android:name="android.Manifest.permission.NETWORK_SETTINGS" /> <!-- 백그라운드에서 위치권한 사용 -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- Foreground Service 사용 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 절전모드 : 화이트리스트 등록 권한 요청 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- 잠금화면, 꺼진화면 깨우기 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -39,38 +29,38 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
         <activity
             android:name=".LoadingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/LoadingTheme" >
-
+            android:theme="@style/LoadingTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
-        <activity android:name=".StartServiceActivity"/>
-
-        <!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
-        <activity android:name=".popup.SubActivity"
+        <activity android:name=".MainActivity" />
+        <activity android:name=".StartServiceActivity" /> <!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
+        <activity android:name=".WifiscanActivity" />
+        <activity
+            android:name=".popup.SubActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=".popup"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
 
-        <receiver android:name="com.example.makaotalk.WifiReceiver" >
+        <receiver android:name=".WifiReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
                     tools:ignore="BatteryLife" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.example.makaotalk.AlarmReceiver" />
-        <service android:name="com.example.makaotalk.UndeadService"
-            android:foregroundServiceType="location"/>
+        <receiver android:name=".AlarmReceiver" />
+
+        <service
+            android:name=".UndeadService"
+            android:foregroundServiceType="location" />
     </application>
 
 </manifest>
