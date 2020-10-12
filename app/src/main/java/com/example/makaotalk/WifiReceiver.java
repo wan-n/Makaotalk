@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 
 import com.example.makaotalk.popup.SubActivity;
+import com.example.makaotalk.wifiscan.PreferenceManager;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
