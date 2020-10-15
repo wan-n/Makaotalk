@@ -38,6 +38,16 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.WifiViewHolder
         holder.setItem(items.get(position));
     }
 
+    public void clear() {
+        items.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<ScanResult> list) {
+        items.addAll(list);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return items.size();

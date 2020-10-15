@@ -1,11 +1,5 @@
 package com.example.makaotalk.wifiscan;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +8,19 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.makaotalk.MainActivity;
 import com.example.makaotalk.R;
@@ -40,6 +42,8 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
     public String wifi_saved;
     private TextView tv_wifi;
     private Context mContext;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView.Adapter<WifiAdapter.WifiViewHolder> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,30 +64,45 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
         //권한설정
         AutoPermissions.Companion.loadAllPermissions(this,101);
 
+        //swipe refresh 객체, 새로고침
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                searchWifi();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //새로고침 완료
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 4000);
+            }
+        });
+
+
+
+
+        //새로고침 아이콘 색상
+        mSwipeRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light
+        );
+
         s_wifi.setOnClickListener(this);
 
         wLoadFile();
 
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.scan_button:
                 Log.d("wifi scan", "한다! 와이파이 스캔!");
-
-                //Wifi Scan
-                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-                getApplicationContext().registerReceiver(wifiScanReceiver, intentFilter);
-
-                //Event Bus
-                try{ EventBus.getDefault().register(this); }catch (Exception ignored){}
-
-                boolean success = wifiManager.startScan();
-                if (!success)
-                    Toast.makeText(WifiscanActivity.this, "Wifi Scan에 실패하였습니다." , Toast.LENGTH_SHORT).show();
-
+                searchWifi();
                 break;
 
             /*case R.id.del_button:
@@ -93,6 +112,20 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
                 break;
              */
         }
+    }
+
+    public void searchWifi(){
+        //Wifi Scan
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        getApplicationContext().registerReceiver(wifiScanReceiver, intentFilter);
+
+        //Event Bus
+        try{ EventBus.getDefault().register(this); }catch (Exception ignored){}
+
+        boolean success = wifiManager.startScan();
+        if (!success)
+            Toast.makeText(WifiscanActivity.this, "Wifi Scan에 실패하였습니다." , Toast.LENGTH_SHORT).show();
     }
 
 
@@ -115,7 +148,7 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
     private void scanSuccess() {
         Log.d("wifi", "여기는 scanSuccess!");
         List<ScanResult> results = wifiManager.getScanResults();
-        RecyclerView.Adapter<WifiAdapter.WifiViewHolder> mAdapter = new WifiAdapter(results);
+        mAdapter = new WifiAdapter(results);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -127,7 +160,6 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void wifiEvent(wifiDialog.WifiData event){
         wifi_ssid = event.ssid;
-
         Log.d("wifi","Main ssid : " + wifi_ssid);
         Log.d("wifi", "저장할것인가 자네");
         wSaveFile(wifi_ssid);
