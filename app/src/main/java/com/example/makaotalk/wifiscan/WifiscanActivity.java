@@ -50,7 +50,6 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
         mContext = this.getApplicationContext();
         tv_wifi = findViewById(R.id.tv_svWifiName);
         Button s_wifi = findViewById(R.id.scan_button);
-        Button d_wifi = findViewById(R.id.del_button);
         recyclerView = findViewById(R.id.rv_recyclerview);
         recyclerView.setHasFixedSize(true);
 
@@ -62,7 +61,6 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
         AutoPermissions.Companion.loadAllPermissions(this,101);
 
         s_wifi.setOnClickListener(this);
-        d_wifi.setOnClickListener(this);
 
         wLoadFile();
 
@@ -88,11 +86,12 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
 
                 break;
 
-            case R.id.del_button:
+            /*case R.id.del_button:
                 //key 삭제
                 PreferenceManager.removeKey(mContext,"Wifi_ssid");
                 Log.d("wifi", "삭제란다 애송아");
                 break;
+             */
         }
     }
 

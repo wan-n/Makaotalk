@@ -1,78 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorLoading"
     tools:context=".wifiscan.WifiscanActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:padding="10dp"
-        android:layout_gravity="center_horizontal">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/del_button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#D3EEFA"
-            android:text="@string/delete"
-            android:layout_marginHorizontal="20dp"
-            tools:ignore="ButtonStyle" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/scan_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#D3EEFA"
-            android:text="@string/wifi_scan"
-            android:layout_marginHorizontal="20dp"
-            tools:ignore="ButtonStyle" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_weight="3">
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/wifiTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/saved_wifi"
+                    android:textColor="#1D678A"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="20dp">
+                <TextView
+                    android:id="@+id/tv_svWifiName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/wifi_name"
+                    android:textStyle="bold"
+                    android:textColor="#EAF3F6"
+                    android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/wifiTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/saved_wifi"
-            android:textColor="#167CA8"
-            android:textSize="20sp"/>
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_svWifiName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/wifi_name"
-            android:textColor="#2A2C2E"
-            android:textSize="30sp"/>
+            <Button
+                android:id="@+id/scan_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/btn_wifiscan"
+                android:text="@string/wifi_scan"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle"
+                android:layout_weight="1"/>
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E9F6FB"
         android:orientation="vertical"
-        android:padding="15dp"
-        android:layout_margin="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
-        android:layout_marginVertical="40dp"/>
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="#FFFFFF" />
 
 </LinearLayout>
