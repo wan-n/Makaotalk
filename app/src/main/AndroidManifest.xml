@@ -47,6 +47,11 @@
             android:excludeFromRecents="true"
             android:taskAffinity=".popup"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".popup.TouchActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=".popup"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />/>
 
         <receiver android:name=".WifiReceiver">
             <intent-filter>

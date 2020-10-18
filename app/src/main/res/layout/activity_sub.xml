@@ -41,6 +41,12 @@
                 android:layout_height="wrap_content"
                 android:text="detect_object" />
 
+            <Button
+                android:id="@+id/btnOther"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="다른 방법" />
+
         </LinearLayout>
 
     </LinearLayout>

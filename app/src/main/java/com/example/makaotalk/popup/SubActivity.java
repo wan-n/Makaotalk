@@ -1,6 +1,7 @@
 package com.example.makaotalk.popup;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,8 @@ public class SubActivity extends Activity {
     private Button btnDetectObject;
     private CameraView cameraView;
 
+    private Button btnOther;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +48,9 @@ public class SubActivity extends Activity {
         WifiReceiver.checkPop = true;
         WifiReceiver.tt.cancel();    //알림 반복 종료
 
-
-
         cameraView = findViewById(R.id.cameraView);
         textViewResult = findViewById(R.id.textViewResult);
+        btnOther = findViewById(R.id.btnOther);
         btnDetectObject = findViewById(R.id.btnDetectObject);
 
         cameraView.addCameraKitListener(new CameraKitEventListener() {
@@ -112,7 +114,32 @@ public class SubActivity extends Activity {
             }
         });
 
+        btnOther.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), TouchActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
         initTensorFlowAndLoadModel();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 0){
+            if (resultCode==RESULT_OK){
+                WifiReceiver.checkPop=false;  //마스크 인증 완료 시
+                WifiReceiver.tt.cancel();    //알림 반복 종료
+
+                finish();
+            }
+            else{
+
+            }
+        }
     }
 
     @Override
@@ -120,12 +147,13 @@ public class SubActivity extends Activity {
         super.onResume();
         cameraView.start();
 
+        WifiReceiver.tt.cancel(); //알림 반복 종료
         WifiReceiver.checkPop = true;  //포그라운드서비스에서 notification 기능 건너뜀
-        WifiReceiver.tt.cancel();    //알림 반복 종료
     }
 
     @Override
     protected void onPause() {
+        Log.d("popup", "카메라 화면 onPause");
         cameraView.stop();
         super.onPause();
     }
@@ -134,14 +162,13 @@ public class SubActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-
+        Log.d("popup", "카메라 화면 onStop");
         //알람 재가동
         if(WifiReceiver.checkPop){
             WifiReceiver.repeatNotification(getBaseContext());
             WifiReceiver.checkPop = false;
             finish();
         }
-
     }
 
     @Override
@@ -177,4 +204,5 @@ public class SubActivity extends Activity {
             }
         });
     }
+
 }
