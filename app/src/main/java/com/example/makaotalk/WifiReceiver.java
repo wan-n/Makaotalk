@@ -34,7 +34,6 @@ import static android.content.Context.WIFI_SERVICE;
 
 public class WifiReceiver extends BroadcastReceiver  {
 
-    public static boolean checkPop;    //팝업창이 떠 있는지 체크
     public static boolean checkSSID;  //현재 등록된 와이파이와 연결된 와이파이가 같은지 구분하기 위한 변수
     private static PowerManager.WakeLock sCpuWakeLock;
     public static TimerTask tt;
@@ -69,7 +68,7 @@ public class WifiReceiver extends BroadcastReceiver  {
 
 
         //등록된 와이파이명과 연결된 와이파이명이 같을 경우 && 팝업창이 켜져있지 않을 경우
-        if (checkSSID && !checkPop) {
+        if (checkSSID) {
 
             //타이머(알림반복)가 작동 중이라면
             if (tt != null) {

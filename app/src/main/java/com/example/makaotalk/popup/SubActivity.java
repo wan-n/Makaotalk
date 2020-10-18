@@ -1,6 +1,7 @@
 package com.example.makaotalk.popup;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -39,14 +40,13 @@ public class SubActivity extends Activity {
 
     private Button btnOther;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
 
         Log.d("popup", "팝업창 표시");
-        WifiReceiver.checkPop = true;
-        WifiReceiver.tt.cancel();    //알림 반복 종료
 
         cameraView = findViewById(R.id.cameraView);
         textViewResult = findViewById(R.id.textViewResult);
@@ -92,7 +92,8 @@ public class SubActivity extends Activity {
                     if(title.contains("mask")||title.contains("diaper")) {
                         Toast.makeText(getApplicationContext(), "마스크 인식 완료~!", Toast.LENGTH_LONG).show();
 
-                        WifiReceiver.checkPop=false;  //마스크 인증 완료 시
+                        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        notificationManager.cancel(2);
                         WifiReceiver.tt.cancel();    //알림 반복 종료
 
                         finish();
@@ -117,8 +118,8 @@ public class SubActivity extends Activity {
         btnOther.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), TouchActivity.class);
-                startActivityForResult(intent, 0);
+                Intent touchPopup = new Intent(v.getContext(), TouchActivity.class);
+                startActivityForResult(touchPopup, 0);
             }
         });
 
@@ -131,13 +132,10 @@ public class SubActivity extends Activity {
 
         if (requestCode == 0){
             if (resultCode==RESULT_OK){
-                WifiReceiver.checkPop=false;  //마스크 인증 완료 시
                 WifiReceiver.tt.cancel();    //알림 반복 종료
-
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.cancel(2);
                 finish();
-            }
-            else{
-
             }
         }
     }
@@ -147,8 +145,7 @@ public class SubActivity extends Activity {
         super.onResume();
         cameraView.start();
 
-        WifiReceiver.tt.cancel(); //알림 반복 종료
-        WifiReceiver.checkPop = true;  //포그라운드서비스에서 notification 기능 건너뜀
+        Log.d("popup", "카메라 화면 재시작");
     }
 
     @Override
@@ -158,18 +155,6 @@ public class SubActivity extends Activity {
         super.onPause();
     }
 
-    //하단버튼
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("popup", "카메라 화면 onStop");
-        //알람 재가동
-        if(WifiReceiver.checkPop){
-            WifiReceiver.repeatNotification(getBaseContext());
-            WifiReceiver.checkPop = false;
-            finish();
-        }
-    }
 
     @Override
     protected void onDestroy() {

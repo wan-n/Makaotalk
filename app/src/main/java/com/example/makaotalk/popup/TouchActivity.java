@@ -1,7 +1,10 @@
 package com.example.makaotalk.popup;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,6 +24,7 @@ public class TouchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.touch);
 
+
         // SubActivity onPuase하기 위한 반투명 코드
         WindowManager.LayoutParams layoutParams= new WindowManager.LayoutParams();
         layoutParams.flags= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
@@ -30,8 +34,6 @@ public class TouchActivity extends Activity {
         textviewtouch = (TextView)findViewById(R.id.textviewtouch);
         btn = (Button)findViewById(R.id.btn);
 
-        WifiReceiver.checkPop = true;
-        WifiReceiver.tt.cancel();    //알림 반복 종료
 
         btn.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -45,8 +47,9 @@ public class TouchActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        WifiReceiver.checkPop = true;  //포그라운드서비스에서 notification 기능 건너뜀
-        WifiReceiver.tt.cancel();    //알림 반복 종료
+        Log.d("popup", "터치 화면 재시작");
+
+
     }
 
     @Override
@@ -59,8 +62,9 @@ public class TouchActivity extends Activity {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 if(count==0){
-                    WifiReceiver.checkPop=false;  //마스크 인증 완료 시
                     WifiReceiver.tt.cancel();    //알림 반복 종료
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    notificationManager.cancel(2);
                     setResult(RESULT_OK);
                     finish();
                 }

@@ -63,7 +63,6 @@ public class StartServiceActivity extends AppCompatActivity {
                     case R.id.switch1:
                         if(switch1.isChecked()){
                             //foreground service 시작
-                            WifiReceiver.checkPop = false;
                             checkSwitch = true;
                             startForeground();
 
@@ -94,15 +93,6 @@ public class StartServiceActivity extends AppCompatActivity {
         };
         switch1.setOnClickListener(listener);
 
-
-        if(checkSwitch){
-
-
-        }else {
-            tv_status.setText("OFF");
-
-
-        }
 
     }
 
