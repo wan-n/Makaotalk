@@ -8,13 +8,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:background="@drawable/background_color"
         android:orientation="vertical">
 
         <com.wonderkiln.camerakit.CameraView
             android:id="@+id/cameraView"
             android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_height="500dp"
             android:layout_gravity="center|top"
             android:layout_marginTop="20dp" />
 
@@ -30,22 +30,22 @@
                 android:layout_marginTop="20dp"
                 android:maxLines="15" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnDetectObject"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="100pt"
+                android:layout_height="50pt"
+                android:src="@drawable/camera_button"
+                android:layout_gravity="center|top"
+                android:background="#4e7da6"
                 android:text="detect_object" />
 
             <Button
                 android:id="@+id/btnOther"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="다른 방법" />
+                android:background="#4e7da6"
+                android:text="마스크를 두고 왔어요!" />
 
         </LinearLayout>
 

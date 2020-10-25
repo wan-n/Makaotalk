@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ public class SubActivity extends Activity {
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private TextView textViewResult;
-    private Button btnDetectObject;
+    private ImageButton btnDetectObject;
     private CameraView cameraView;
 
     private Button btnOther;
@@ -49,7 +50,7 @@ public class SubActivity extends Activity {
         Log.d("popup", "팝업창 표시");
 
         cameraView = findViewById(R.id.cameraView);
-        textViewResult = findViewById(R.id.textViewResult);
+       // textViewResult = findViewById(R.id.textViewResult);
         btnOther = findViewById(R.id.btnOther);
         btnDetectObject = findViewById(R.id.btnDetectObject);
 
