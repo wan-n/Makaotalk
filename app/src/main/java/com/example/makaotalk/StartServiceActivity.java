@@ -50,7 +50,7 @@ public class StartServiceActivity extends AppCompatActivity {
         //이미 foreground service가 작동중인 상태에서 앱을 재실행한 상태라면
         if (null != UndeadService.serviceIntent){
             foregroundServiceIntent = UndeadService.serviceIntent;
-            Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -107,10 +107,10 @@ public class StartServiceActivity extends AppCompatActivity {
         if (null == UndeadService.serviceIntent) {
             foregroundServiceIntent = new Intent(this, UndeadService.class);
             startService(foregroundServiceIntent);
-            Toast.makeText(getApplicationContext(), "start service", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "start service", Toast.LENGTH_SHORT).show();
         } else {
             foregroundServiceIntent = UndeadService.serviceIntent;
-            Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_SHORT).show();
         }
     }
 

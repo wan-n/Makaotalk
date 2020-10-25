@@ -90,11 +90,11 @@ public class UndeadService extends Service {
 
         //상태바에 아이콘 표시(notification)
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
-        builder.setSmallIcon(R.drawable.cat);
+        builder.setSmallIcon(R.drawable.icon_forground);
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
-        style.bigText("앱 실행하기");
+        style.bigText("    앱을 실행하려면 누르세요.");
         style.setBigContentTitle(null);
-        style.setSummaryText("Wifi 상태 체크 중");
+        style.setSummaryText("Wifi 상태 체크 중 ...");
         builder.setContentText(null);
         builder.setContentTitle(null);
         builder.setOngoing(true);

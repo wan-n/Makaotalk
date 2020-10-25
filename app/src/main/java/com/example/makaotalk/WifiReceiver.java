@@ -145,9 +145,9 @@ public class WifiReceiver extends BroadcastReceiver  {
 
         Log.d("WIFI", "알림생성");
         NotificationCompat.Builder noti = new NotificationCompat.Builder(context, "2");
-        noti.setContentTitle("Wifi 체크");
-        noti.setContentText("마스크 확인");
-        noti.setSmallIcon(R.drawable.cat);
+        noti.setContentTitle("외출하셨나요?");
+        noti.setContentText("눌러서 마스크 인증하기");
+        noti.setSmallIcon(R.drawable.icon_notification);
         noti.setOngoing(true);
         noti.setColor(Color.RED);
         // 사용자가 탭을 클릭하면 자동 제거
