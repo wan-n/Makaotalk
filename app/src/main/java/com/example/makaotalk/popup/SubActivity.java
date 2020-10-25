@@ -50,7 +50,7 @@ public class SubActivity extends Activity {
         Log.d("popup", "팝업창 표시");
 
         cameraView = findViewById(R.id.cameraView);
-       // textViewResult = findViewById(R.id.textViewResult);
+        textViewResult = findViewById(R.id.textViewResult);
         btnOther = findViewById(R.id.btnOther);
         btnDetectObject = findViewById(R.id.btnDetectObject);
 
