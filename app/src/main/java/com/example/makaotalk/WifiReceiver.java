@@ -116,7 +116,7 @@ public class WifiReceiver extends BroadcastReceiver  {
         tt = new TimerTask() {
             @Override
             public void run() {
-                createNotification(context);
+                 createNotification(context);
             }
         };
 
@@ -159,7 +159,7 @@ public class WifiReceiver extends BroadcastReceiver  {
         // 알림 표시
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(new NotificationChannel("2", "기본 채널", NotificationManager.IMPORTANCE_DEFAULT));
+            notificationManager.createNotificationChannel(new NotificationChannel("2", "기본 채널", NotificationManager.IMPORTANCE_HIGH));
         }
 
         // id값은
