@@ -20,6 +20,7 @@
             android:textSize="35dp" />
 
         <TextView
+            android:id="@+id/tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -32,13 +33,15 @@
             android:id="@+id/btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_above="@+id/tv"
             android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/selector_btn_color"
-            android:layout_marginTop="10dp"
-            tools:ignore="ButtonStyle"
-            android:text="마스크가 있어요!"/>
+            android:text="마스크가 있어요!"
+            tools:ignore="ButtonStyle" />
 
     </RelativeLayout>
 

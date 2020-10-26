@@ -106,7 +106,7 @@ public class UndeadService extends Service {
         builder.setContentIntent(pendingIntent);
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
-            manager.createNotificationChannel(new NotificationChannel("1", "undead_service", NotificationManager.IMPORTANCE_NONE));
+            manager.createNotificationChannel(new NotificationChannel("1", "undead_service", NotificationManager.IMPORTANCE_MIN));
         }
         Notification notification = builder.build();
         startForeground(1, notification);

@@ -1,5 +1,6 @@
 package com.example.makaotalk;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -7,8 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +34,8 @@ public class StartServiceActivity extends AppCompatActivity {
     private Context mContext;
     public String wifi_saved;
 
+    ImageView ImageView_settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +52,18 @@ public class StartServiceActivity extends AppCompatActivity {
 
         //와이파이 강도 측정 기능 제어할 스위치 삽입
         switch1 = findViewById(R.id.switch1);
+
+        //설정 버튼 삽입
+       ImageView_settings = findViewById(R.id.ImageView_settings);
+
+        //설정 버튼 클릭하면 settings_popup으로 화면 이동
+       ImageView_settings.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent intent = new Intent(getApplicationContext(), SettingsPopup.class);
+               startActivity(intent);
+           }
+       });
 
         //이미 foreground service가 작동중인 상태에서 앱을 재실행한 상태라면
         if (null != UndeadService.serviceIntent){
@@ -131,6 +149,8 @@ public class StartServiceActivity extends AppCompatActivity {
             line2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_line2));
         }
     }
+
+
 
     @Override
     public void onDestroy() {
