@@ -81,8 +81,6 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
         });
 
 
-
-
         //새로고침 아이콘 색상
         mSwipeRefreshLayout.setColorSchemeResources(
                 android.R.color.holo_blue_light,
