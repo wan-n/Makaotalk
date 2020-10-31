@@ -2,6 +2,7 @@ package com.example.makaotalk.popup;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,19 +12,22 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.makaotalk.PreferenceManager;
 import com.example.makaotalk.R;
 import com.example.makaotalk.WifiReceiver;
 
 public class TouchActivity extends Activity {
     private TextView textviewtouch;
     private Button btn;
-    int count = 100;
 
+    private int count;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.touch);
 
+        // 설정 값을 불러와 count에 저장
+        count = PreferenceManager.getInt(this, "rebuild");
 
         // SubActivity onPuase하기 위한 반투명 코드
         WindowManager.LayoutParams layoutParams= new WindowManager.LayoutParams();
@@ -34,6 +38,8 @@ public class TouchActivity extends Activity {
         textviewtouch = (TextView)findViewById(R.id.textviewtouch);
         btn = (Button)findViewById(R.id.btn);
 
+        // count 값 세팅
+        textviewtouch.setText(Integer.toString(count));
 
         btn.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -46,17 +52,13 @@ public class TouchActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
         Log.d("popup", "터치 화면 재시작");
-
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
     }
-
 
     public boolean onTouchEvent(MotionEvent event){
         switch (event.getAction()){

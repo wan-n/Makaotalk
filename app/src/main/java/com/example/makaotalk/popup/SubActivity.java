@@ -99,6 +99,9 @@ public class SubActivity extends Activity {
 
                         finish();
                     }
+                    else{
+                        Toast.makeText(getApplicationContext(), "마스크 인식 실패", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
