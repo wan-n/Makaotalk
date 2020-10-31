@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.makaotalk.PreferenceManager;
 import com.example.makaotalk.R;
@@ -69,6 +70,7 @@ public class TouchActivity extends Activity {
                     notificationManager.cancel(2);
                     setResult(RESULT_OK);
                     finish();
+                    Toast.makeText(getApplicationContext(), "알람이 종료되었습니다", Toast.LENGTH_SHORT).show();
                 }
 
                 else{

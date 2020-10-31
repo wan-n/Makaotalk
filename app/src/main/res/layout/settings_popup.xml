@@ -16,7 +16,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:top="1dp"
+            android:bottom="1dp">
 
             <TextView
                 android:id="@+id/TextView_wifi_reset"
@@ -34,9 +36,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:background="@drawable/selector_btn_color"
-                android:text="재설정" />
+                android:text="GO" />
 
         </LinearLayout>
+
+        <View
+            android:background = "#4D6975"
+            android:layout_width="match_parent"
+            android:layout_height="2px">
+        </View>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,20 +54,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:top="1dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#4D6975"
-                    android:textStyle="bold"
                     android:layout_marginLeft="20dp"
+                    android:text="터치횟수 설정"
+                    android:textColor="#4D6975"
                     android:textSize="20dp"
-                    android:text="터치횟수 설정" />
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/TextView_touch_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"/>
+                    android:layout_marginLeft="30dp" />
             </LinearLayout>
 
             <SeekBar
@@ -69,25 +80,25 @@
                 android:layout_margin="20dp"
                 android:background="@drawable/background_color"
                 android:max="1000"
-                android:min="100"/>
+                android:min="100" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_minus"
-                    android:text="-50"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="-50" />
 
                 <Button
                     android:id="@+id/btn_plus"
-                    android:text="+50"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="+50" />
 
             </LinearLayout>
 

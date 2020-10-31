@@ -14,7 +14,7 @@
         <com.wonderkiln.camerakit.CameraView
             android:id="@+id/cameraView"
             android:layout_width="300dp"
-            android:layout_height="500dp"
+            android:layout_height="400dp"
             android:layout_gravity="center|top"
             android:layout_marginTop="40dp" />
 
@@ -35,9 +35,9 @@
                 android:id="@+id/btnDetectObject"
                 android:layout_width="100pt"
                 android:layout_height="40pt"
-                android:src="@drawable/camera_button"
                 android:layout_gravity="center|top"
                 android:background="#6FC3E6"
+                android:src="@drawable/camera_button"
                 android:text="detect_object" />
 
             <Button
