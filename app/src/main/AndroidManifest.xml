@@ -28,7 +28,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".LoadingActivity"
             android:screenOrientation="portrait"
@@ -42,13 +41,12 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".StartServiceActivity" />
         <activity android:name=".wifiscan.WifiscanActivity" />
-        <activity
-            android:name=".SettingsPopup"/>
+        <activity android:name=".SettingsPopup" />
         <activity
             android:name=".popup.SubActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=".popup"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" /><!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" /> <!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
         <activity
             android:name=".popup.TouchActivity"
             android:excludeFromRecents="true"
@@ -68,7 +66,6 @@
         <service
             android:name=".UndeadService"
             android:foregroundServiceType="location" />
-
     </application>
 
 </manifest>
