@@ -7,9 +7,11 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.makaotalk.wifiscan.WifiscanActivity;
 
-public class SettingsPopup extends StartServiceActivity {
+public class SettingsPopup extends AppCompatActivity {
     private SeekBar seekBar;
     private TextView TextView_touch_count;
     private int count;
