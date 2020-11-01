@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.makaotalk.MainActivity;
 import com.example.makaotalk.R;
-import com.example.makaotalk.StartServiceActivity;
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 
@@ -172,7 +172,7 @@ public class WifiscanActivity extends AppCompatActivity implements View.OnClickL
         PreferenceManager.setString(mContext,"Wifi_ssid",ssid);
 
         //ACTIVITY REFRESH
-        Intent refresh = new Intent(this, StartServiceActivity.class);
+        Intent refresh = new Intent(this, MainActivity.class);
         startActivity(refresh);
         this.finish();
     }
