@@ -35,7 +35,7 @@
                     android:id="@+id/wifiTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/saved_wifi"
+                    android:text="홈 와이파이"
                     android:textColor="#1D678A"
                     android:textSize="25sp"
                     android:textStyle="bold" />
