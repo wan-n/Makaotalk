@@ -24,8 +24,8 @@
         android:layout_height="60dp"
         android:gravity="center"
         android:textColor="#000000"
-        android:textSize="16dp"
-        android:text="선택된 와이파이를 저장합니다"/>
+        android:textSize="13dp"
+        android:text="해당 와이파이를 홈 와이파이로 지정하시겠습니까?"/>
 
     <View
         android:layout_width="match_parent"
@@ -38,12 +38,12 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/okButton"
+            android:id="@+id/cancelButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="확인"
+            android:text="아니오"
             android:textColor="#000000"
             android:textSize="16dp"
             android:background="#ffffff"/>
@@ -54,12 +54,12 @@
             android:background="#000000" />
 
         <Button
-            android:id="@+id/cancelButton"
+            android:id="@+id/okButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="취소"
+            android:text="예"
             android:textColor="#000000"
             android:textSize="16dp"
             android:background="#ffffff"/>
