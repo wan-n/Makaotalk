@@ -27,10 +27,6 @@
         android:textSize="13dp"
         android:text="해당 와이파이를 홈 와이파이로 지정하시겠습니까?"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,13 +41,8 @@
             android:gravity="center"
             android:text="아니오"
             android:textColor="#000000"
-            android:textSize="16dp"
-            android:background="#ffffff"/>
+            android:textSize="16dp" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000" />
 
         <Button
             android:id="@+id/okButton"
@@ -61,8 +52,7 @@
             android:gravity="center"
             android:text="예"
             android:textColor="#000000"
-            android:textSize="16dp"
-            android:background="#ffffff"/>
+            android:textSize="16dp" />
     </LinearLayout>
 
     <View
