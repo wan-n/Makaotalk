@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         if (btext.equals("user")) {
             //user 값일 때
             Log.d("Main", "유우우우저!");
+            WifiReceiver.checkSSID = false;  //알림울림 방지
             Intent intent1 = new Intent(MainActivity.this, StartServiceActivity.class);
             startActivity(intent1);
         } else {

@@ -67,7 +67,7 @@ public class WifiReceiver extends BroadcastReceiver  {
         }
 
 
-        //등록된 와이파이명과 연결된 와이파이명이 같을 경우 && 팝업창이 켜져있지 않을 경우
+        //등록된 와이파이명과 연결된 와이파이명이 같을 경우
         if (checkSSID) {
 
             //타이머(알림반복)가 작동 중이라면
