@@ -48,13 +48,12 @@ public class wifiDialog {
                 EventBus.getDefault().post(new WifiData(ssid));
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();
+                Toast.makeText(wcontext, "설정이 완료되었습니다", Toast.LENGTH_SHORT).show();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(wcontext, "취소 했습니다.", Toast.LENGTH_SHORT).show();
-
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();
             }
