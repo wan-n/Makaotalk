@@ -1,28 +1,36 @@
 package com.example.makaotalk;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.View;
-
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
+
+import com.example.makaotalk.wifiscan.WifiAdapter;
+import com.example.makaotalk.wifiscan.WifiscanActivity;
 
 public class Tutorial extends AppCompatActivity {
 
     ViewFlipper flipper;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_tutorial);
+
+        flipper = (ViewFlipper) findViewById(R.id.flipper);
 
 
         for (int i = 0; i < 4; i++) {
@@ -31,11 +39,12 @@ public class Tutorial extends AppCompatActivity {
             flipper.addView(img);
         }
 
-        Animation showIn = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
+        Animation showIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
         flipper.setInAnimation(showIn);
-        flipper.setOutAnimation(this, android.R.anim.slide_out_right);
+        flipper.setOutAnimation(this, android.R.anim.fade_out);
 
     }
+
 
 
     public void mOnClick(View v) {
@@ -51,8 +60,10 @@ public class Tutorial extends AppCompatActivity {
                 flipper.showNext();
 
                 break;
-            case R.id.btn_fin:
-                finish();
+            case R.id.btn_fin: {
+                Intent intent = new Intent(getApplicationContext(), WifiscanActivity.class);
+                startActivity(intent);
+            }
         }
     }
 

@@ -50,9 +50,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
                 //begin 이라는 key 로 저장된 데이터가 default 값일때 데이터 저장한다.
                 Log.d("Main", "초보자임돠");
                 PreferenceManager.setString(mContext, "begin", "user");
-                Intent intent2 = new Intent(MainActivity.this, WifiAdapter.class);
-                Intent newIntent = new Intent(MainActivity.this, Tutorial.class);
-                startActivity(newIntent);
+                Intent intent2 = new Intent(MainActivity.this, Tutorial.class);
                 startActivity(intent2);
             }
             finish();

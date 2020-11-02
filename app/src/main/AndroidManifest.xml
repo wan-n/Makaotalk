@@ -39,6 +39,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+        <activity android:name=".Tutorial" />
         <activity android:name=".StartServiceActivity" />
         <activity android:name=".wifiscan.WifiscanActivity" />
         <activity android:name=".SettingsPopup" />
