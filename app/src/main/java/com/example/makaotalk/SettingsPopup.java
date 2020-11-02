@@ -16,6 +16,7 @@ public class SettingsPopup extends AppCompatActivity {
     private TextView TextView_touch_count;
     private int count;
 
+
     private Button btn_minus;
     private Button btn_plus;
 
@@ -23,6 +24,18 @@ public class SettingsPopup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_popup);
+        /**
+         * 튜토리얼 이동
+         */
+        Button btn_watch_tutorial = findViewById(R.id.btn_watch_tutorial);
+        btn_watch_tutorial.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent3 = new Intent(SettingsPopup.this, Tutorial.class);
+                startActivity(intent3);
+            }
+        });
+
 /**
  * 와이파이 설정
  */

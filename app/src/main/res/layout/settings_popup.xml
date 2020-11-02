@@ -13,6 +13,7 @@
         android:layout_margin="20dp"
         android:orientation="vertical">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,6 +102,42 @@
                     android:text="+50" />
 
             </LinearLayout>
+
+
+            <View
+                android:background = "#4D6975"
+                android:layout_width="match_parent"
+                android:layout_height="2px">
+            </View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:top="1dp"
+                android:bottom="1dp">
+
+                <TextView
+                    android:id="@+id/TextView_watch_tutorial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:textSize="20dp"
+                    android:textColor="#4D6975"
+                    android:textStyle="bold"
+                    android:text="튜토리얼 보기" />
+
+                <Button
+                    android:id="@+id/btn_watch_tutorial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/selector_btn_color"
+                    android:text="GO" />
+
+            </LinearLayout>
+
+
 
 
         </LinearLayout>
