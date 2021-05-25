@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.MakaoTalk.makaotalk">
+    package="com.MakaoTalkforMask.makaotalkformask">
     <!-- wifi scan -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -18,7 +18,6 @@
     <uses-permission android:name="android.Manifest.permission.NETWORK_SETTINGS" /> <!-- 백그라운드에서 위치권한 사용 -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- Foreground Service 사용 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 절전모드 : 화이트리스트 등록 권한 요청 -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- 잠금화면, 꺼진화면 깨우기 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -29,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.MakaoTalk.makaotalk.LoadingActivity"
+            android:name="com.MakaoTalkforMask.makaotalkformask.LoadingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoadingTheme">
             <intent-filter>
@@ -38,23 +37,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.MakaoTalk.makaotalk.MainActivity" />
-        <activity android:name="com.MakaoTalk.makaotalk.Tutorial" />
-        <activity android:name="com.MakaoTalk.makaotalk.StartServiceActivity" />
-        <activity android:name="com.MakaoTalk.makaotalk.wifiscan.WifiscanActivity" />
-        <activity android:name="com.MakaoTalk.makaotalk.SettingsPopup" />
+        <activity android:name="com.MakaoTalkforMask.makaotalkformask.MainActivity" />
+        <activity android:name="com.MakaoTalkforMask.makaotalkformask.Tutorial" />
+        <activity android:name="com.MakaoTalkforMask.makaotalkformask.StartServiceActivity" />
+        <activity android:name="com.MakaoTalkforMask.makaotalkformask.wifiscan.WifiscanActivity" />
+        <activity android:name="com.MakaoTalkforMask.makaotalkformask.SettingsPopup" />
         <activity
-            android:name="com.MakaoTalk.makaotalk.popup.SubActivity"
+            android:name="com.MakaoTalkforMask.makaotalkformask.popup.SubActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=".popup"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" /> <!-- 풀스크린 테마를 사용해야만 잠금화면에서 내용을 표시할 수 있다. -->
         <activity
-            android:name="com.MakaoTalk.makaotalk.popup.TouchActivity"
+            android:name="com.MakaoTalkforMask.makaotalkformask.popup.TouchActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=".popup"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
 
-        <receiver android:name="com.MakaoTalk.makaotalk.WifiReceiver">
+        <receiver android:name="com.MakaoTalkforMask.makaotalkformask.WifiReceiver">
             <intent-filter>
                 <action
                     android:name="android.net.conn.CONNECTIVITY_CHANGE"
@@ -62,10 +61,10 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.MakaoTalk.makaotalk.AlarmReceiver" />
+        <receiver android:name="com.MakaoTalkforMask.makaotalkformask.AlarmReceiver" />
 
         <service
-            android:name="com.MakaoTalk.makaotalk.UndeadService"
+            android:name="com.MakaoTalkforMask.makaotalkformask.UndeadService"
             android:foregroundServiceType="location" />
     </application>
 
